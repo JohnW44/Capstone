@@ -18,7 +18,8 @@ class HelpRequest(db.Model):
 
     user = db.relationship('User', back_populates='help_requests')
     location = db.relationship('Location', back_populates='help_requests')
-    reviews = db.relationship('Review', back_populates='help_request', cascade='all, delete-orphan')
+    review = db.relationship('Review', back_populates='help_request', cascade='all, delete-orphan')
+    categories = db.relationship('Category',secondary='help_request_categories',back_populates='help_requests')
 
     def to_dict(self):
         return {
@@ -28,5 +29,6 @@ class HelpRequest(db.Model):
             'description': self.description,
             'locationId': self.location_id,
             'status': self.status,
+            'categories': [category.to_dict() for category in self.categories],
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }

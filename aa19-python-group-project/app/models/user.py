@@ -10,11 +10,17 @@ class User(db.Model, UserMixin):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
 
     help_requests = db.relationship('HelpRequest', back_populates='user', cascade='all, delete-orphan')
+    reviews_given = db.relationship('Review', foreign_keys='Review.user_id', back_populates='user', cascade='all, delete-orphan')
+    reviews_received = db.relationship('Review', foreign_keys='Review.volunteer_id', back_populates='volunteer', cascade='all, delete-orphan')
+    locations = db.relationship('Location', back_populates='user', cascade='all, delete-orphan')
+    categories = db.relationship('Category', back_populates='user', cascade='all, delete-orphan')
 
     @property
     def password(self):
@@ -31,5 +37,11 @@ class User(db.Model, UserMixin):
         return {
             'id': self.id,
             'username': self.username,
-            'email': self.email
+            'email': self.email,
+            'firstName': self.first_name,
+            'Last_name': self.last_name,
+            'reviews_given': [review.to_dict() for review in self.reviews_given],
+            'reviews_received': [review.to_dict() for review in self.reviews_received],
+            'locations': [location.to_dict() for location in self.locations],
+            'categories': [category.to_dict() for category in self.categories]
         }
