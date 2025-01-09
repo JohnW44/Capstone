@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from app.models import db, HelpRequest, Location, Category, User
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.orm import joinedload
 
 help_request_routes = Blueprint('help_requests', __name__)
@@ -65,8 +65,8 @@ def create_help_request():
         description=data.get('description'),
         location_id=data.get('locationId'),
         status='pending',
-        created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow()
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc)
     )
 
     if 'categories' in data:
@@ -118,7 +118,7 @@ def update_help_request(requestId):
             if category:
                 help_request.categories.append(category)
 
-    help_request.updated_at = datetime.utcnow()
+    help_request.updated_at = datetime.now(timezone.utc)
     db.session.commit()
 
     return jsonify({"HelpRequest": help_request.to_dict()})

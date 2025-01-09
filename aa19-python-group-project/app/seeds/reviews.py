@@ -1,5 +1,5 @@
-from app.models import db, Review
-from datetime import datetime
+from app.models import db, Review, User, HelpRequest
+from datetime import datetime, timezone
 from sqlalchemy.sql import text
 from app.models.db import environment, SCHEMA
 
@@ -10,7 +10,7 @@ def seed_reviews():
         help_request_id=1,   
         rating=5,
         comment="Marnie was very helpful with my lawn!",
-        created_at=datetime.now()
+        created_at=datetime.now(timezone.utc)
     )
 
     review2 = Review(
@@ -19,7 +19,7 @@ def seed_reviews():
         help_request_id=2,   
         rating=4,
         comment="Bobbie helped me with my groceries, very kind!",
-        created_at=datetime.now()
+        created_at=datetime.now(timezone.utc)
     )
 
     db.session.add(review1)

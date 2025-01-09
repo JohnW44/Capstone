@@ -34,12 +34,20 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password, password)
 
     def to_dict(self):
+        """Basic user information for auth responses"""
         return {
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'firstName': self.first_name,
-            'Last_name': self.last_name,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'profile_image': None  
+        }
+
+    def to_dict_detailed(self):
+        """Detailed user information including relationships"""
+        return {
+            **self.to_dict(),  # Include all basic info
             'reviews_given': [review.to_dict() for review in self.reviews_given],
             'reviews_received': [review.to_dict() for review in self.reviews_received],
             'locations': [location.to_dict() for location in self.locations],
