@@ -5,4 +5,4 @@ from .categories import Category
 from .help_request import HelpRequest
 from .reviews import Review
 from .help_request_category import help_request_categories
-from .db import environment, SCHEMA
+from .db import environment, SCHEMA, add_prefix_for_prod
