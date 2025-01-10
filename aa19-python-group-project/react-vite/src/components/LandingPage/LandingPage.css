@@ -1,0 +1,67 @@
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 32px;
+  text-align: center;
+}
+
+.header-section {
+  margin-bottom: 48px;
+}
+
+.header-section h1 {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.tagline {
+  font-size: 24px;
+  color: #666;
+}
+
+.main-buttons {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.action-button {
+  padding: 32px 64px;
+  font-size: 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.action-button:hover {
+  transform: scale(1.05);
+}
+
+.need-help {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.want-help {
+  background-color: #2196F3;
+  color: white;
+}
+
+.login-section {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.login-section p {
+  margin-bottom: 8px;
+  font-size: 19.2px;
+}
+
+.login {
+  background-color: #9C27B0;
+  color: white;
+}
