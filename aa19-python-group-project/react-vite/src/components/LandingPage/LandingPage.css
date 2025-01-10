@@ -4,12 +4,12 @@
   align-items: center;
   justify-content: space-between;
   min-height: 100vh;
-  padding: 32px;
+  padding: 15px;
   text-align: center;
 }
 
 .header-section {
-  margin-bottom: 48px;
+  margin-bottom: 15px;
 }
 
 .header-section h1 {
@@ -24,12 +24,15 @@
 
 .main-buttons {
   display: flex;
+  /* flex-direction: row; */
+  justify-content: space-between;
+  width: 80%;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 15px;
 }
 
 .action-button {
-  padding: 32px 64px;
+  padding: 34px 55px;
   font-size: 24px;
   border: none;
   border-radius: 8px;
@@ -52,7 +55,7 @@
 }
 
 .login-section {
-  margin-top: 16px;
+  /* margin-top: 16px; */
   text-align: center;
 }
 

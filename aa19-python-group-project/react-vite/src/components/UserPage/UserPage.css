@@ -1,0 +1,23 @@
+.user-page {
+    padding: 20px;
+  }
+  
+  .user-page h2 {
+    margin-bottom: 20px;
+  }
+  
+  .user-page section {
+    margin-bottom: 30px;
+  }
+  
+  .user-page ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .user-page li {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
