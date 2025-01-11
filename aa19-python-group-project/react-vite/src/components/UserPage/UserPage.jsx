@@ -1,3 +1,4 @@
+import MapComponent from '../MapComponent/MapComponent';
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Navigation from "../Navigation/Navigation";
@@ -6,7 +7,7 @@ import "./UserPage.css";
 function UserPage() {
   const [helpRequests, setHelpRequests] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [locations, setLocations] = useState([]);
+//   const [locations, setLocations] = useState([]);
   const user = useSelector((state) => state.session.user);
 
   useEffect(() => {
@@ -23,15 +24,15 @@ function UserPage() {
       .then((data) => {
         setCategories(data.categories || []);
       });
-  }, []);
+  }, []); 
 
-  useEffect(() => {
-    fetch(`/api/locations/`)
-      .then((response) => response.json())
-      .then((data) => {
-        setLocations(data.locations || []);
-      });
-  }, []);
+//   useEffect(() => {
+//     fetch(`/api/locations/`)
+//       .then((response) => response.json())
+//       .then((data) => {
+//         setLocations(data.locations || []);
+//       });
+//   }, []);
 
   return (
     <div className="user-page">
@@ -54,20 +55,14 @@ function UserPage() {
         </ul>
       </section>
       <section>
+        <h3>Your Map</h3>
+        <MapComponent />
+      </section>
+      <section>
         <h3>Your Categories</h3>
         <ul>
           {categories.map((category) => (
             <li key={category.id}>{category.name}</li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h3>Your Locations</h3>
-        <ul>
-          {locations.map((location) => (
-            <li key={location.id}>
-              {location.name} - {location.address}
-            </li>
           ))}
         </ul>
       </section>
