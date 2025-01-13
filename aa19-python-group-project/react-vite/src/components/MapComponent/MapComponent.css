@@ -1,0 +1,36 @@
+.map-container {
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.info-window {
+  padding: 10px;
+  max-width: 200px;
+}
+
+.info-window h3 {
+  color: #0066cc;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.info-window .description {
+  font-size: 14px;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.info-window .location-name {
+  font-weight: 600;
+  color: #444;
+  margin: 8px 0;
+}
+
+.info-window .posted-by {
+  font-style: italic;
+  color: #666;
+  font-size: 12px;
+  margin: 8px 0 0 0;
+}

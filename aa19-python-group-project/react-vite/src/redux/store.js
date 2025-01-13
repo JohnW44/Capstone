@@ -6,9 +6,13 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
+import helpRequestsReducer from "./helpRequests";
+import locationsReducer from "./locations";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  helpRequests : helpRequestsReducer,
+  locations: locationsReducer
 });
 
 let enhancer;

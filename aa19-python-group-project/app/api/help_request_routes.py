@@ -20,7 +20,7 @@ def get_help_requests():
         joinedload(HelpRequest.review)
     ).all()
     
-    return jsonify({'HelpRequests': [request.to_dict() for request in help_requests]})
+    return {'HelpRequests': [help_req.to_dict() for help_req in help_requests]}
 
 
 @help_request_routes.route('/<int:requestId>', methods=['GET'])

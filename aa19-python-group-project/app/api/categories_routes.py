@@ -64,7 +64,7 @@ def create_category():
         name=data.get('name'),
         description=data.get('description'),
         is_default=data.get('is_default', False),
-        created_at=datetime.now()
+        created_at=datetime.now(timezone.utc)
     )
 
     db.session.add(new_category)

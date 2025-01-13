@@ -27,8 +27,8 @@ class Location(db.Model):
             'user_id': self.user_id,
             'name': self.name,
             'address': self.address,
-            'lat': self.lat,
-            'lng': self.lng,
+            'lat': float(self.lat),
+            'lng': float(self.lng),
             'locationType': self.location_type,
             'notes': self.notes,
             'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S")

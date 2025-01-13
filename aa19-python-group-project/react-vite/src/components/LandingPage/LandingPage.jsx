@@ -1,8 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import "./LandingPage.css";
 
 function LandingPage() {
   const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => !!state.session.user);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/user");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleHelperClick = () => {
     alert("Feature coming soon! Stay tuned!");

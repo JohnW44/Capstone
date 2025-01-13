@@ -1,23 +1,108 @@
 .user-page {
-    padding: 20px;
-  }
-  
-  .user-page h2 {
-    margin-bottom: 20px;
-  }
-  
-  .user-page section {
+    padding: 100px 40px 40px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.user-page h1 {
+    font-size: 32px;
+    color: #000000;
     margin-bottom: 30px;
-  }
-  
-  .user-page ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .user-page li {
+}
+
+.user-page h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 40px 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0066cc;
+}
+
+.help-requests, .all-help-requests {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.help-request {
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.help-request:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-left: 3px solid #0066cc;
+}
+
+.help-request h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.help-request p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.help-request p:last-child {
+    margin-bottom: 0;
+}
+
+.help-request p:first-of-type {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.help-requests p {
+    font-size: 18px;
+    color: #666;
+    text-align: center;
+    grid-column: 1 / -1;
+    padding: 40px;
     background-color: #f9f9f9;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-  }
+    border-radius: 12px;
+}
+
+.show-location-btn {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.show-location-btn:hover {
+    background-color: #0052a3;
+}
+
+.show-location-btn:active {
+    transform: scale(0.98);
+}
+
+.map-container {
+    margin-top: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.user-page h2 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0066cc;
+}

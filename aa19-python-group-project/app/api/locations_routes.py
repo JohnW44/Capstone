@@ -6,13 +6,24 @@ from datetime import datetime, timezone
 location_routes = Blueprint('locations', __name__)
 
 @location_routes.route('/', methods=['GET'])
-@login_required
 def get_locations():
     """
-    Get all locations for current user
+    Get all locations associated with help requests and user locations if authenticated
     """
-    locations = Location.query.filter_by(user_id=current_user.id).all()
-    return {'locations': [location.to_dict() for location in locations]}
+    help_request_locations = Location.query.join(
+        HelpRequest,
+        Location.id == HelpRequest.location_id
+    ).distinct().all()
+
+    location_set = set(help_request_locations)
+
+    if current_user.is_authenticated:
+        user_locations =Location.query.filter_by(user_id=current_user.id).all()
+        location_set.update(user_locations)
+
+    all_locations = list(location_set)
+
+    return {'locations': [location.to_dict() for location in all_locations]}
 
 
 @location_routes.route('/<int:locationId>', methods=['GET'])

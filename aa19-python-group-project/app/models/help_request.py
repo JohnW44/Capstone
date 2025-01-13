@@ -30,5 +30,6 @@ class HelpRequest(db.Model):
             'locationId': self.location_id,
             'status': self.status,
             'categories': [category.to_dict() for category in self.categories],
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'username': self.user.username
         }

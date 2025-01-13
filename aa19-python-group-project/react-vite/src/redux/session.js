@@ -20,6 +20,7 @@ export const thunkAuthenticate = () => async (dispatch) => {
 
 		dispatch(setUser(data));
 	}
+  console.log("Auth check response:", response);
 };
 
 export const thunkLogin = (credentials) => async dispatch => {

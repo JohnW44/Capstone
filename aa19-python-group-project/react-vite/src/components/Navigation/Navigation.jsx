@@ -6,20 +6,21 @@ function Navigation() {
   const location = useLocation();
   const isLandingPage = location.pathname === "/";
 
-  // Don't show navigation on landing page
   if (isLandingPage) {
     return null;
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      <li>
-        <ProfileButton />
-      </li>
-    </ul>
+    <nav className="navigation-container">
+      <ul className="nav-list">
+        <li>
+          <NavLink to="/user" className="nav-link">Home</NavLink>
+        </li>
+        <li>
+          <ProfileButton />
+        </li>
+      </ul>
+    </nav>
   );
 }
 
