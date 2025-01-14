@@ -13,7 +13,7 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
     const [showSavedLocations, setShowSavedLocations] = useState(false);
     const { closeModal } = useModal();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [searchInput, setSearchInput] = useState('')
+    const [searchInput, setSearchInput] = useState('');
 
     const user = useSelector(state => state.session.user);
     const locations = useSelector(state => state.locations);
@@ -41,10 +41,9 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
             name: 'Selected Location',
             locationType: 'custom'
         };
+        console.log('Map Click - New Location:', newLocation);
         setMarker(newLocation);
     }, []);
-
-    // if (!isLoaded) return <div>Loading...</div>;
 
     const onPlacesChanged = () => {
         if (searchBox) {
@@ -61,8 +60,8 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
                 name: place.name || 'Selected Location',
                 locationType: 'searched'
             };
-            
-            setMarker(newLocation);
+            console.log('Search - New Location:', newLocation);
+            setMarker(newLocation)
             setSearchInput(place.formatted_address || '')
         }
     };
@@ -84,8 +83,9 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
             lng: parseFloat(location.lng),
             address: location.address,
             name: location.name,
-            location_type: location.locationType
+            location_type: location.locationType || 'custom'
         });
+        
         setSearchInput(location.address)
         setShowSavedLocations(false);
     }
@@ -93,29 +93,40 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
     const handleConfirm = async () => {
         if (marker && !isSubmitting) {
             setIsSubmitting(true);
-            const locationData = {
-                name: marker.name || 'Custom Location',
-                address: marker.address,
-                lat: marker.lat.toString(),
-                lng: marker.lng.toString(),
-                locationType: marker.location_type || 'custom'
-            };
-            
-            const newLocation = await dispatch(createLocation(locationData));
-            if (newLocation && helpRequestId) {
-                await dispatch(updateHelpRequestLocation(helpRequestId, newLocation.id));
+            const existingLocation = userLocations.find(loc => {
+                const latDiff = Math.abs(parseFloat(loc.lat) - marker.lat) < 0.0001;
+                const lngDiff = Math.abs(parseFloat(loc.lng) - marker.lng) < 0.0001;
+                return latDiff && lngDiff;
+            });
+
+            let locationToUse;
+
+            if (existingLocation) {
+                locationToUse = existingLocation;
+            } else {
+                const locationData = {
+                    name: marker.name || 'Custom Location',
+                    address: marker.address,
+                    lat: marker.lat.toString(),
+                    lng: marker.lng.toString(),
+                    locationType: marker.location_type || 'custom'
+                };
+                locationToUse = await dispatch(createLocation(locationData));
+            }
+
+            if (locationToUse && helpRequestId) {
+                await dispatch(updateHelpRequestLocation(helpRequestId, locationToUse.id));
             }
             
-            onLocationSelect(newLocation);
+            onLocationSelect(locationToUse);
             closeModal();
             setIsSubmitting(false);
         }
     };
 
     useEffect(() => {
-        console.log('LocationChangeModal mounted');
-        return () => console.log('LocationChangeModal unmounted');
-    }, []);
+        console.log('Current Marker State:', marker);
+    }, [marker]);
 
     return (
         <div className='location-change-container'>
@@ -182,16 +193,25 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
                         </StandaloneSearchBox>
                     </div>
 
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={defaultCenter}
+                <GoogleMap
+                         mapContainerStyle={containerStyle}
+                        center={marker ? {
+                            lat: Number(marker.lat),
+                            lng: Number(marker.lng)
+                        } : defaultCenter}
                         zoom={12}
                         onClick={onMapClick}
                     >
                         {marker && (
-                            <Marker position={{ lat: marker.lat, lng: marker.lng }} />
-                        )}
-                    </GoogleMap>
+                            <Marker
+                            key={`${marker.lat}-${marker.lng}`}
+                            position={{
+                                lat: Number(marker.lat),
+                                lng: Number(marker.lng)
+                            }}
+                        />
+                    )}
+                </GoogleMap>
                 </>
             )}
 
