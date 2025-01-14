@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { GoogleMap, Marker, StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { createLocation, deleteLocation } from '../../redux/locations';
@@ -14,6 +14,7 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
     const { closeModal } = useModal();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [searchInput, setSearchInput] = useState('');
+    const [isMapLoaded, setIsMapLoaded] = useState(false);
 
     const user = useSelector(state => state.session.user);
     const locations = useSelector(state => state.locations);
@@ -41,11 +42,10 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
             name: 'Selected Location',
             locationType: 'custom'
         };
-        console.log('Map Click - New Location:', newLocation);
         setMarker(newLocation);
     }, []);
 
-    const onPlacesChanged = () => {
+    const onPlacesChanged = useCallback(() => {
         if (searchBox) {
             const places = searchBox.getPlaces();
             if (!places || places.length === 0) return;
@@ -60,11 +60,11 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
                 name: place.name || 'Selected Location',
                 locationType: 'searched'
             };
-            console.log('Search - New Location:', newLocation);
-            setMarker(newLocation)
-            setSearchInput(place.formatted_address || '')
+            
+            setMarker(newLocation);
+            setSearchInput(place.formatted_address || '');
         }
-    };
+    }, [searchBox]);
 
     const handleDeleteLocation = async (locationId) => {
         const isLocationInUse = helpRequests.some(request =>
@@ -124,9 +124,9 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
         }
     };
 
-    useEffect(() => {
-        console.log('Current Marker State:', marker);
-    }, [marker]);
+    // useEffect(() => {
+    //     console.log('Current Marker State:', marker);
+    // }, [marker]);
 
     return (
         <div className='location-change-container'>
@@ -193,25 +193,31 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
                         </StandaloneSearchBox>
                     </div>
 
-                <GoogleMap
-                         mapContainerStyle={containerStyle}
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
                         center={marker ? {
                             lat: Number(marker.lat),
                             lng: Number(marker.lng)
                         } : defaultCenter}
                         zoom={12}
                         onClick={onMapClick}
+                        onLoad={() => setIsMapLoaded(true)}
+                        options={{
+                            gestureHandling: 'greedy',
+                            disableDefaultUI: false,
+                        }}
                     >
-                        {marker && (
+                        {isMapLoaded && marker && (
                             <Marker
-                            key={`${marker.lat}-${marker.lng}`}
-                            position={{
-                                lat: Number(marker.lat),
-                                lng: Number(marker.lng)
-                            }}
-                        />
-                    )}
-                </GoogleMap>
+                                key={`${marker.lat}-${marker.lng}`}
+                                position={{
+                                    lat: Number(marker.lat),
+                                    lng: Number(marker.lng)
+                                }}
+                                animation={window.google.maps.Animation.DROP}
+                            />
+                        )}
+                    </GoogleMap>
                 </>
             )}
 
