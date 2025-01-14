@@ -45,3 +45,85 @@
     background-color: #cccccc;
     cursor: not-allowed;
   }
+  
+  .location-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .option-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .option-btn.active {
+    background: #0066cc;
+    color: white;
+    border-color: #0066cc;
+  }
+  
+  .saved-locations-list {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .saved-location-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .saved-location-item:last-child {
+    border-bottom: none;
+  }
+  
+  .location-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+  }
+  
+  .location-info p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .location-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .select-btn {
+    background: #0066cc;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .no-locations {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }

@@ -29,8 +29,7 @@ export const createLocation = (locationData) => async (dispatch) => {
     const response = await fetch('/api/locations/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
+            'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify(locationData)
@@ -48,8 +47,7 @@ export const deleteLocation = (locationId) => async (dispatch) => {
         const response = await fetch(`/api/locations/${locationId}`, {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
+            'Content-Type': 'application/json'
         },
         credentials: 'include'
     });
@@ -67,7 +65,6 @@ const locationsReducer = (state = [], action) => {
     console.log(" action     ", action);
     
     let nextState;
-    let existingLocations;
     
     switch (action.type) {
         case LOAD_LOCATIONS:
