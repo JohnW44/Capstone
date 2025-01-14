@@ -6,6 +6,7 @@ import { useModal } from '../../context/Modal';
 import './LocationChangeModal.css'
 
 function LocationChangeModal({ onLocationSelect }) {
+    const dispatch = useDispatch();
     const [marker, setMarker] = useState(null);
     const [searchBox, setSearchBox] = useState(null);
     const [showSavedLocations, setShowSavedLocations] = useState(false);
@@ -66,7 +67,7 @@ function LocationChangeModal({ onLocationSelect }) {
             alert("Cannot delete location that is being used by help requests");
             return;
         }
-        await dispatch(deleteLocation(locationid));
+        await dispatch(deleteLocation(locationId));
     };
 
     const handleSelectSavedLocation = (location) => {
