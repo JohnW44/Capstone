@@ -13,6 +13,7 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
     const [showSavedLocations, setShowSavedLocations] = useState(false);
     const { closeModal } = useModal();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [searchInput, setSearchInput] = useState('')
 
     const user = useSelector(state => state.session.user);
     const locations = useSelector(state => state.locations);
@@ -62,6 +63,7 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
             };
             
             setMarker(newLocation);
+            setSearchInput(place.formatted_address || '')
         }
     };
 
@@ -80,39 +82,33 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
         setMarker({
             lat: parseFloat(location.lat),
             lng: parseFloat(location.lng),
-            address: location.name,
+            address: location.address,
+            name: location.name,
             location_type: location.locationType
         });
+        setSearchInput(location.address)
         setShowSavedLocations(false);
     }
 
     const handleConfirm = async () => {
         if (marker && !isSubmitting) {
-            try {
-                setIsSubmitting(true);
-                const locationData = {
-                    name: marker.name || 'Custom Location',
-                    address: marker.address,
-                    lat: marker.lat.toString(),
-                    lng: marker.lng.toString(),
-                    locationType: marker.location_type || 'custom'
-                };
-
-                const newLocation = await dispatch(createLocation(locationData));
-                
-                if (newLocation) {
-                    if (helpRequestId) {
-                        await dispatch(updateHelpRequestLocation(helpRequestId, newLocation.id));
-                    }
-                    
-                    onLocationSelect(newLocation);
-                    closeModal();
-                }
-            } catch (error) {
-                console.error('Error in handleConfirm:', error);
-            } finally {
-                setIsSubmitting(false);
+            setIsSubmitting(true);
+            const locationData = {
+                name: marker.name || 'Custom Location',
+                address: marker.address,
+                lat: marker.lat.toString(),
+                lng: marker.lng.toString(),
+                locationType: marker.location_type || 'custom'
+            };
+            
+            const newLocation = await dispatch(createLocation(locationData));
+            if (newLocation && helpRequestId) {
+                await dispatch(updateHelpRequestLocation(helpRequestId, newLocation.id));
             }
+            
+            onLocationSelect(newLocation);
+            closeModal();
+            setIsSubmitting(false);
         }
     };
 
@@ -180,6 +176,8 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
                                 type="text"
                                 placeholder="Search for a location"
                                 className='location-search-input'
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
                             />
                         </StandaloneSearchBox>
                     </div>

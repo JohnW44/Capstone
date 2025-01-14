@@ -50,9 +50,13 @@ export const createHelpRequest = (requestData) => async (dispatch) => {
 export const updateHelpRequestLocation = (helpRequestId, locationId) => async (dispatch) => {
     const response = await fetch(`/api/help_requests/${helpRequestId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json'
+        },
         credentials: 'include',
-        body: JSON.stringify({ location_id: locationId })
+        body: JSON.stringify({ 
+            locationId: locationId
+        })
     });
 
     if (response.ok) {
