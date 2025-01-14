@@ -17,7 +17,7 @@ class Location(db.Model):
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
 
-    # Relationships
+    
     user = db.relationship('User', back_populates='locations')
     help_requests = db.relationship('HelpRequest', back_populates='location', cascade='all, delete-orphan')
 

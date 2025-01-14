@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchHelpRequests, updateHelpRequestLocation } from "../../redux/helpRequests";
-import { createLocation, fetchLocations } from "../../redux/locations";
+import { fetchHelpRequests } from "../../redux/helpRequests";
+import { fetchLocations } from "../../redux/locations";
 import { useModal } from '../../context/Modal';
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import MapComponent from '../MapComponent/MapComponent';
@@ -17,54 +17,13 @@ function UserPage() {
     const locations = useSelector(state => state.locations);
     const { setModalContent } = useModal();
 
-    const handleLocationConfirm = async (locationData, helpRequestId) => {
-        try {
-            const response = await fetch('/api/locations/', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(locationData)
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Failed to create location: ${errorData.message || 'Unknown error'}`);
-            }
-
-            const { location } = await response.json();
-            dispatch(createLocation(location));
-            
-            const updateResponse = await fetch(`/api/help_requests/${helpRequestId}`, {
-                method: 'PUT',
-                headers: { 
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    locationId: location.id
-                })
-            });
-            
-            if (!updateResponse.ok) {
-                const errorData = await updateResponse.json();
-                throw new Error(`Failed to update help request: ${errorData.message || 'Unknown error'}`);
-            }
-
-            const updatedRequest = await updateResponse.json();
-            dispatch(updateHelpRequestLocation(updatedRequest.HelpRequest));
-            
-            dispatch(fetchHelpRequests());
-            dispatch(fetchLocations());
-            
-        } catch (error) {
-            console.error('Error updating location:', error);
-        }
-    };
-
     const handleChangeLocation = (request) => {
         setModalContent(
             <LocationChangeModal 
-                onLocationSelect={(newLocation) => handleLocationConfirm(newLocation, request.id)}
+                helpRequestId={request.id}
+                onLocationSelect={() => {
+                    setSelectedRequestId(request.id);
+                }}
             />
         );
     };

@@ -3,9 +3,10 @@ import { GoogleMap, Marker, StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { createLocation, deleteLocation } from '../../redux/locations';
 import { useModal } from '../../context/Modal';
+import { updateHelpRequestLocation } from '../../redux/helpRequests';
 import './LocationChangeModal.css'
 
-function LocationChangeModal({ onLocationSelect }) {
+function LocationChangeModal({ onLocationSelect, helpRequestId }) {
     const dispatch = useDispatch();
     const [marker, setMarker] = useState(null);
     const [searchBox, setSearchBox] = useState(null);
@@ -96,12 +97,19 @@ function LocationChangeModal({ onLocationSelect }) {
                     lng: marker.lng.toString(),
                     locationType: marker.location_type || 'custom'
                 };
-                
+
                 const newLocation = await dispatch(createLocation(locationData));
+                
                 if (newLocation) {
+                    if (helpRequestId) {
+                        await dispatch(updateHelpRequestLocation(helpRequestId, newLocation.id));
+                    }
+                    
                     onLocationSelect(newLocation);
                     closeModal();
                 }
+            } catch (error) {
+                console.error('Error in handleConfirm:', error);
             } finally {
                 setIsSubmitting(false);
             }
