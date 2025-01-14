@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, Marker, StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { createLocation, deleteLocation } from '../../redux/locations';
@@ -11,6 +11,7 @@ function LocationChangeModal({ onLocationSelect }) {
     const [searchBox, setSearchBox] = useState(null);
     const [showSavedLocations, setShowSavedLocations] = useState(false);
     const { closeModal } = useModal();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const user = useSelector(state => state.session.user);
     const locations = useSelector(state => state.locations);
@@ -18,7 +19,7 @@ function LocationChangeModal({ onLocationSelect }) {
 
     const userLocations = locations.filter(location =>
         location.userId === user?.id
-    )
+    );
     
     const containerStyle = {
         width: '100%',
@@ -36,23 +37,27 @@ function LocationChangeModal({ onLocationSelect }) {
             lng: e.latLng.lng(),
             address: 'Custom Location',
             name: 'Selected Location',
-            location_type: 'custom'
+            locationType: 'custom'
         };
         setMarker(newLocation);
     }, []);
 
+    // if (!isLoaded) return <div>Loading...</div>;
+
     const onPlacesChanged = () => {
         if (searchBox) {
             const places = searchBox.getPlaces();
-            if (places.length === 0) return;
+            if (!places || places.length === 0) return;
 
             const place = places[0];
+            if (!place || !place.geometry || !place.geometry.location) return;
+
             const newLocation = {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
-                address: place.formatted_address,
-                name: place.name,
-                location_type: 'searched'
+                address: place.formatted_address || '',
+                name: place.name || 'Selected Location',
+                locationType: 'searched'
             };
             
             setMarker(newLocation);
@@ -75,29 +80,38 @@ function LocationChangeModal({ onLocationSelect }) {
             lat: parseFloat(location.lat),
             lng: parseFloat(location.lng),
             address: location.name,
-            location_type: location.location_type
+            location_type: location.locationType
         });
         setShowSavedLocations(false);
     }
 
     const handleConfirm = async () => {
-        if (marker) {
-            const locationData ={
-                name: marker.name || 'Custom Location',
-                address: marker.address,
-                lat: marker.lat.toString(),
-                lng: marker.lng.toString(),
-                location_type: marker.location_type || 'custom'
-            };
-
-            const newLocation = await dispatch(createLocation(locationData));
-            if (newLocation){
-
-                onLocationSelect(marker);
-                closeModal();
+        if (marker && !isSubmitting) {
+            try {
+                setIsSubmitting(true);
+                const locationData = {
+                    name: marker.name || 'Custom Location',
+                    address: marker.address,
+                    lat: marker.lat.toString(),
+                    lng: marker.lng.toString(),
+                    locationType: marker.location_type || 'custom'
+                };
+                
+                const newLocation = await dispatch(createLocation(locationData));
+                if (newLocation) {
+                    onLocationSelect(newLocation);
+                    closeModal();
+                }
+            } finally {
+                setIsSubmitting(false);
             }
         }
     };
+
+    useEffect(() => {
+        console.log('LocationChangeModal mounted');
+        return () => console.log('LocationChangeModal unmounted');
+    }, []);
 
     return (
         <div className='location-change-container'>
@@ -180,9 +194,9 @@ function LocationChangeModal({ onLocationSelect }) {
                 <button
                     className='confirm-btn'
                     onClick={handleConfirm}
-                    disabled={!marker}
+                    disabled={!marker || isSubmitting}
                 >
-                    Confirm Location
+                    {isSubmitting ? 'Creating...' : 'Confirm Location'}
                 </button>
             </div>
         </div>

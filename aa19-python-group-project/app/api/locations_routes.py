@@ -41,7 +41,7 @@ def create_location():
     """
 
     data = request.json
-    required_fields = ['name', 'address', 'lat', 'lng', 'location_type']
+    required_fields = ['name', 'address', 'lat', 'lng', 'locationType']
     errors = {field: ['This field is required'] for field in required_fields if not data.get(field)}
 
     if errors:
@@ -56,7 +56,7 @@ def create_location():
         address=data.get('address'),
         lat=data.get('lat'),
         lng=data.get('lng'),
-        location_type=data.get('location_type'),
+        location_type=data.get('locationType'),
         notes=data.get('notes'),
         created_at=datetime.now(timezone.utc)
     )
@@ -98,8 +98,8 @@ def update_location(locationId):
     if 'lng' in data:
         location.lng = data['lng']
 
-    if 'location_type' in data:
-        location.location_type = data['location_type']
+    if 'locationType' in data:
+        location.location_type = data['locationType']
 
     if 'notes' in data:
         location.notes = data['notes']

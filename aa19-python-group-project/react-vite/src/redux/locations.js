@@ -18,7 +18,7 @@ const removeLocation = (locationId) => ({
 })
 
 export const fetchLocations = () => async (dispatch) => {
-    const response = await fetch('/api/locations');
+    const response = await fetch('/api/locations/');
     if (response.ok) {
         const data = await response.json();
         dispatch(loadLocations(data.locations));
@@ -26,21 +26,26 @@ export const fetchLocations = () => async (dispatch) => {
 };
 
 export const createLocation = (locationData) => async (dispatch) => {
-    const response = await fetch('/api/locations/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(locationData)
-    });
+    try {
+        const response = await fetch('/api/locations/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(locationData)
+        });
 
-    if (response.ok) {
-        const data = await response.json();
-        dispatch(addLocation(data.location));
-        return data.location;
+        if (response.ok) {
+            const data = await response.json();
+            dispatch(addLocation(data.location));
+            return data.location;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error creating location:', error);
+        return null;
     }
-    return null;
 };
 
 export const deleteLocation = (locationId) => async (dispatch) => {
@@ -71,7 +76,11 @@ const locationsReducer = (state = [], action) => {
             nextState = [...action.locations];
             break;
         case ADD_LOCATION:
-            nextState = [...state, action.location];
+            if (!state.some(loc => loc.id === action.location.id)) {
+                nextState = [...state, action.location];
+            } else {
+                nextState = state;
+            }
             break;
         case REMOVE_LOCATION:
             nextState = state.filter(location => location.id !== action.locationId);
