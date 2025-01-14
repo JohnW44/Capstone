@@ -89,6 +89,25 @@
     transform: scale(0.98);
 }
 
+.change-location-btn {
+    background-color: #34a853;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.change-location-btn:hover {
+    background-color: #2d8f47;
+}
+
+.change-location-btn:active {
+    transform: scale(0.98);
+}
+
 .map-container {
     margin-top: 20px;
     border-radius: 12px;
@@ -105,4 +124,9 @@ html {
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #0066cc;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-around;
 }

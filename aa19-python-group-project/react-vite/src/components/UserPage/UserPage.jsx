@@ -1,9 +1,11 @@
-import MapComponent from '../MapComponent/MapComponent';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchHelpRequests } from "../../redux/helpRequests";
-import { fetchLocations } from "../../redux/locations";
+import { fetchHelpRequests, updateHelpRequestLocation } from "../../redux/helpRequests";
+import { createLocation, fetchLocations } from "../../redux/locations";
+import { useModal } from '../../context/Modal';
+import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
+import MapComponent from '../MapComponent/MapComponent';
 import "./UserPage.css";
 
 function UserPage() {
@@ -11,12 +13,61 @@ function UserPage() {
     const navigate = useNavigate();
     const [selectedRequestId, setSelectedRequestId] = useState(null);
     const user = useSelector(state => state.session.user);
-    const helpRequests = useSelector(state => {
-        console.log("Full Redux State:", state);
-        console.log("Help Requests from Redux:", state.helpRequests);
-        return state.helpRequests;
-    });
+    const helpRequests = useSelector(state => state.helpRequests);
     const locations = useSelector(state => state.locations);
+    const { setModalContent } = useModal();
+
+    const handleLocationConfirm = async (locationData, helpRequestId) => {
+        try {
+            const response = await fetch('/api/locations/', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(locationData)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Failed to create location: ${errorData.message || 'Unknown error'}`);
+            }
+
+            const { location } = await response.json();
+            dispatch(createLocation(location));
+            
+            const updateResponse = await fetch(`/api/help_requests/${helpRequestId}`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    locationId: location.id
+                })
+            });
+            
+            if (!updateResponse.ok) {
+                const errorData = await updateResponse.json();
+                throw new Error(`Failed to update help request: ${errorData.message || 'Unknown error'}`);
+            }
+
+            const updatedRequest = await updateResponse.json();
+            dispatch(updateHelpRequestLocation(updatedRequest.HelpRequest));
+            
+            dispatch(fetchHelpRequests());
+            dispatch(fetchLocations());
+            
+        } catch (error) {
+            console.error('Error updating location:', error);
+        }
+    };
+
+    const handleChangeLocation = (request) => {
+        setModalContent(
+            <LocationChangeModal 
+                onLocationSelect={(newLocation) => handleLocationConfirm(newLocation, request.id)}
+            />
+        );
+    };
 
     useEffect(() => {
         if (!user) {
@@ -25,27 +76,16 @@ function UserPage() {
     }, [user, navigate]);
 
     useEffect(() => {
-        console.log("Fetching help requests...");
-        dispatch(fetchHelpRequests())
-            .then(response => {
-                console.log("Help Requests Response:", response);
-            })
-            .catch(error => {
-                console.error("Error fetching help requests:", error);
-            });
+        dispatch(fetchHelpRequests());
     }, [dispatch]);
 
     useEffect(() => {
         dispatch(fetchLocations());
     }, [dispatch]);
 
-    const userHelpRequests = helpRequests.filter(request => {
-        console.log("Comparing request.userId:", request.userId, "with user.id:", user?.id);
-        return request.userId === user?.id;
-    });
-
-    console.log("Current User:", user);
-    console.log("Filtered User Help Requests:", userHelpRequests);
+    const userHelpRequests = helpRequests.filter(request => 
+        request.userId === user?.id
+    );
 
     if (!user) return null;
 
@@ -60,12 +100,20 @@ function UserPage() {
                         <div key={request.id} className="help-request">
                             <h3>{request.title}</h3>
                             <p>{request.description}</p>
-                            <button 
-                                className="show-location-btn"
-                                onClick={() => setSelectedRequestId(request.id)}
-                            >
-                                Show Location
-                            </button>
+                            <div className="button-group">
+                                <button 
+                                    className="show-location-btn"
+                                    onClick={() => setSelectedRequestId(request.id)}
+                                >
+                                    Show Location
+                                </button>
+                                <button 
+                                    className="change-location-btn"
+                                    onClick={() => handleChangeLocation(request)}
+                                >
+                                    Change Location
+                                </button>
+                            </div>
                         </div>
                     ))
                 ) : (

@@ -15,6 +15,11 @@ const addHelpRequest = (request) => ({
     request
 });
 
+const updateHelpRequest = (request) => ({
+    type: UPDATE_HELP_REQUEST,
+    request
+});
+
 export const fetchHelpRequests = () => async (dispatch) => {
     console.log("Fetching help requests...");
     const response = await fetch('/api/help_requests');
@@ -42,25 +47,52 @@ export const createHelpRequest = (requestData) => async (dispatch) => {
     }
 }
 
+export const updateHelpRequestLocation = (helpRequestId, locationId) => async (dispatch) => {
+    const response = await fetch(`/api/help_requests/${helpRequestId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ location_id: locationId })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(updateHelpRequest(data.HelpRequest));
+        return data.HelpRequest;
+    }
+    return null;
+};
+
 const initialState = [];
 
 const helpRequestsReducer = (state = initialState, action) => {
     console.log("Reducer received action:", action.type);
+    console.log(" action", action.type, "@", new Date().toLocaleTimeString());
+    console.log(" prev state", state);
+    console.log(" action     ", action);
+    
+    let nextState;
     switch (action.type) {
         case LOAD_HELP_REQUESTS:
-            console.log("Setting help requests in state:", action.requests);
-            return [...action.requests];
+            nextState = [...action.requests];
+            break;
         case ADD_HELP_REQUEST:
-            return [...state, action.request];
+            nextState = [...state, action.request];
+            break;
         case UPDATE_HELP_REQUEST:
-            return state.map(request => 
+            nextState = state.map(request => 
                 request.id === action.request.id ? action.request : request
             );
+            break;
         case REMOVE_HELP_REQUEST:
-            return state.filter(request => request.id !== action.requestId);
+            nextState = state.filter(request => request.id !== action.requestId);
+            break;
         default:
-            return state;
+            nextState = state;
     }
+    
+    console.log(" next state", nextState);
+    return nextState;
 };
 
 export default helpRequestsReducer;
