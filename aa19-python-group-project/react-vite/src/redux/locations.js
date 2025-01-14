@@ -1,5 +1,6 @@
-const LOAD_LOCATIONS = 'locations/LOAD'
-const ADD_LOCATION = 'locations/ADD'
+const LOAD_LOCATIONS = 'locations/LOAD';
+const ADD_LOCATION = 'locations/ADD';
+const REMOVE_LOCATION = 'locations/REMOVE';
 
 const loadLocations = (locations) => ({
     type: LOAD_LOCATIONS,
@@ -11,6 +12,11 @@ const addLocation = (location) => ({
     location
 })
 
+const removeLocation = (locationId) => ({
+    type: REMOVE_LOCATION,
+    locationId
+})
+
 export const fetchLocations = () => async (dispatch) => {
     const response = await fetch('/api/locations');
     if (response.ok) {
@@ -20,11 +26,6 @@ export const fetchLocations = () => async (dispatch) => {
 };
 
 export const createLocation = (locationData) => async (dispatch) => {
-    const csrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrf_token='))
-        ?.split('=')[1];
-
     const response = await fetch('/api/locations/', {
         method: 'POST',
         headers: {
@@ -43,6 +44,23 @@ export const createLocation = (locationData) => async (dispatch) => {
     return null;
 };
 
+export const deleteLocation = (locationId) => async (dispatch) => {
+        const response = await fetch(`/api/locations/${locationId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        credentials: 'include'
+    });
+
+    if (response.ok) {
+        dispatch(removeLocation(locationId));
+        return true;
+    }
+    return false;
+};
+
 const locationsReducer = (state = [], action) => {
     console.log(" action", action.type, "@", new Date().toLocaleTimeString());
     console.log(" prev state", state);
@@ -57,6 +75,9 @@ const locationsReducer = (state = [], action) => {
             break;
         case ADD_LOCATION:
             nextState = [...state, action.location];
+            break;
+        case REMOVE_LOCATION:
+            nextState = state.filter(location => location.id !== action.locationId);
             break;
         default:
             nextState = state;
