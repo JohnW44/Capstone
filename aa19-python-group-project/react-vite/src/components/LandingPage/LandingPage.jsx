@@ -2,9 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import "./LandingPage.css";
+import { useModal } from "../../context/Modal";
+import LoginFormModal from "../LoginFormModal/LoginFormModal";
+import SignupFormModal from "../SignupFormModal/SignupFormModal";
 
 function LandingPage() {
   const navigate = useNavigate();
+  const { setModalContent } = useModal();
   const isAuthenticated = useSelector((state) => !!state.session.user);
 
   useEffect(() => {
@@ -15,6 +19,14 @@ function LandingPage() {
 
   const handleHelperClick = () => {
     alert("Feature coming soon! Stay tuned!");
+  };
+
+  const handleLoginClick = () => {
+    setModalContent(<LoginFormModal />);
+  };
+
+  const handleSignupClick = () => {
+    setModalContent(<SignupFormModal />);
   };
 
   return (
@@ -29,7 +41,7 @@ function LandingPage() {
       <div className="main-buttons">
         <button 
           className="action-button need-help"
-          onClick={() => navigate("/signup")}
+          onClick={handleSignupClick}
         >
           I need help
         </button>
@@ -46,7 +58,7 @@ function LandingPage() {
         <p>Already a user?</p>
         <button 
           className="action-button login"
-          onClick={() => navigate("/login")}
+          onClick={handleLoginClick}
         >
           Log in here
         </button>
