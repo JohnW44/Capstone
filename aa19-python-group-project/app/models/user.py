@@ -47,7 +47,7 @@ class User(db.Model, UserMixin):
     def to_dict_detailed(self):
         """Detailed user information including relationships"""
         return {
-            **self.to_dict(),  # Include all basic info
+            **self.to_dict(),
             'reviews_given': [review.to_dict() for review in self.reviews_given],
             'reviews_received': [review.to_dict() for review in self.reviews_received],
             'locations': [location.to_dict() for location in self.locations],
