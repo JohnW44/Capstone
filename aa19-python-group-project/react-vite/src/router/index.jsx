@@ -4,6 +4,7 @@ import SignupFormPage from '../components/SignupFormPage';
 import LandingPage from '../components/LandingPage/LandingPage';
 import UserPage from '../components/UserPage/UserPage';
 import Layout from './Layout';
+import HelpRequestDetail from '../components/HelpRequestDetail/HelpRequestDetail';
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: "user",
         element: <UserPage />
+      },
+      {
+        path: "help-requests/:requestId",
+        element: <HelpRequestDetail />
       }
     ],
   },

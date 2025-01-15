@@ -46,6 +46,16 @@ function UserPage() {
         request.userId === user?.id
     );
 
+    const handleCardClick = (request, e) => {
+        if (e.target.closest('.button-group')) {
+            return;
+        }
+        
+        if (request.userId === user.id) {
+            navigate(`/help-requests/${request.id}`);
+        }
+    };
+
     if (!user) return null;
 
     return (
@@ -56,9 +66,15 @@ function UserPage() {
             <div className="help-requests">
                 {userHelpRequests?.length > 0 ? (
                     userHelpRequests.map(request => (
-                        <div key={request.id} className="help-request">
-                            <h3>{request.title}</h3>
-                            <p>{request.description}</p>
+                        <div 
+                            key={request.id} 
+                            className="help-request clickable"
+                            onClick={(e) => handleCardClick(request, e)}
+                        >
+                            <div className="help-request-content">
+                                <h3>{request.title}</h3>
+                                <p>{request.description}</p>
+                            </div>
                             <div className="button-group">
                                 <button 
                                     className="show-location-btn"
