@@ -88,12 +88,12 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     if environment == "production":
-        op.execute(f"ALTER TABLE <users> SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE <categories> SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE <locations> SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE <help_requests> SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE <help_request_categories> SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE <reviews> SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE categories SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE locations SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE help_requests SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE help_request_categories SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE reviews SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 
