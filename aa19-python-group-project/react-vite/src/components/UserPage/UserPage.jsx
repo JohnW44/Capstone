@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchHelpRequests } from "../../redux/helpRequests";
 import { fetchLocations } from "../../redux/locations";
 import { useModal } from '../../context/Modal';
+import CreateHelpRequestModal from '../CreateHelpRequestModal/CreateHelpRequestModal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import MapComponent from '../MapComponent/MapComponent';
 import "./UserPage.css";
@@ -16,6 +17,16 @@ function UserPage() {
     const helpRequests = useSelector(state => state.helpRequests);
     const locations = useSelector(state => state.locations);
     const { setModalContent } = useModal();
+
+    const handleCreateRequest = () => {
+        setModalContent(
+            <CreateHelpRequestModal
+                onRequestCreated={(newRequest) => {
+                    navigate(`/help_requests/${newRequest.id}`);
+                }}
+            />
+        );
+    };
 
     const handleChangeLocation = (request) => {
         setModalContent(
@@ -60,6 +71,15 @@ function UserPage() {
 
     return (
         <div className="user-page">
+            <div className="page-header">
+                <h1>Welcome, {user.username}</h1>
+                <button 
+                    className="create-request-btn"
+                    onClick={handleCreateRequest}
+                >
+                    Create Help Request
+                </button>
+            </div>
             <h1>Welcome, {user.username}</h1>
             
             <h2>Your Help Requests</h2>

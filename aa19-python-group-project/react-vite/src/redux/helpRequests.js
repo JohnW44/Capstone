@@ -34,16 +34,18 @@ export const fetchHelpRequests = () => async (dispatch) => {
 };
 
 export const createHelpRequest = (requestData) => async (dispatch) => {
+    console.log("Creating help request with data:", requestData);
     const response = await fetch('/api/help_requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(requestData)
     });
-
+    console.log("Response status:", response.status);
     if(response.ok) {
         const newRequest = await response.json();
-        dispatch(addHelpRequest(newRequest));
-        return newRequest;
+        dispatch(addHelpRequest(newRequest.HelpRequest));
+        return newRequest.HelpRequest;
     }
 }
 
