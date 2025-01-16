@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchHelpRequests } from "../../redux/helpRequests";
+import { fetchHelpRequests, updateHelpRequestStatus,  } from "../../redux/helpRequests";
 import { fetchLocations } from "../../redux/locations";
 import { useModal } from '../../context/Modal';
 import CreateHelpRequestModal from '../CreateHelpRequestModal/CreateHelpRequestModal'
@@ -31,7 +31,7 @@ function UserPage() {
 
     const handleChangeLocation = (request) => {
         setModalContent(
-            <LocationChangeModal 
+            <LocationChangeModal
                 helpRequestId={request.id}
                 onLocationSelect={() => {
                     setSelectedRequestId(request.id);
@@ -54,6 +54,12 @@ function UserPage() {
         );
     };
 
+    const handleStatusUpdate = async (request) => {
+        const newStatus = request.status === 'pending' ? 'completed' : 'pending';
+        await dispatch(updateHelpRequestStatus(request.id, newStatus));
+        dispatch(fetchHelpRequests());
+    };
+
     useEffect(() => {
         if (!user) {
             navigate("/");
@@ -71,6 +77,10 @@ function UserPage() {
     const userHelpRequests = helpRequests.filter(request => 
         request.userId === user?.id
     );
+
+    const pendingRequests = userHelpRequests.filter(request => !request.status || request.status === 'pending');
+    const completedRequests = userHelpRequests.filter(request => request.status === 'completed');
+
 
     const handleCardClick = (request, e) => {
         if (e.target.closest('.button-group')) {
@@ -96,50 +106,102 @@ function UserPage() {
                 </button>
             </div>
             
-            <h2>Your Help Requests</h2>
-            <div className="help-requests">
-                {userHelpRequests?.length > 0 ? (
-                    userHelpRequests.map(request => (
-                        <div 
-                            key={request.id} 
-                            className="help-request clickable"
-                            onClick={(e) => handleCardClick(request, e)}
-                        >
-                            <div className="help-request-content">
-                                <h3>{request.title}</h3>
-                                <p>{request.description}</p>
-                            </div>
-                            <div className="button-group">
-                                <button 
-                                    className="details-btn"
-                                    onClick={() => navigate(`/help_requests/${request.id}`)}
+            <div className="help-requests-container">
+                <div className="pending-requests">
+                    <h2>Your Active Help Requests</h2>
+                    <div className="help-requests">
+                        {pendingRequests.length > 0 ? (
+                            pendingRequests.map(request => (
+                                <div 
+                                    key={request.id} 
+                                    className="help-request clickable"
+                                    onClick={(e) => handleCardClick(request, e)}
                                 >
-                                    Details
-                                </button>
-                                <button 
-                                    className="edit-btn"
-                                    onClick={() => handleEditRequest(request)}
+                                    <div className="help-request-content">
+                                        <h3>{request.title}</h3>
+                                        <p>{request.description}</p>
+                                    </div>
+                                    <div className="button-group">
+                                        <button 
+                                            className="details-btn"
+                                            onClick={() => navigate(`/help_requests/${request.id}`)}
+                                        >
+                                            Details
+                                        </button>
+                                        <button 
+                                            className="edit-btn"
+                                            onClick={() => handleEditRequest(request)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button 
+                                            className="status-btn pending"
+                                            onClick={() => handleStatusUpdate(request)}
+                                        >
+                                            Mark Complete
+                                        </button>
+                                        <button 
+                                            className="show-location-btn"
+                                            onClick={() => setSelectedRequestId(request.id)}
+                                        >
+                                            Show Location
+                                        </button>
+                                        <button 
+                                            className="change-location-btn"
+                                            onClick={() => handleChangeLocation(request)}
+                                        >
+                                            Change Location
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No active help requests.</p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="completed-requests">
+                    <h2>Completed Help Requests</h2>
+                    <div className="help-requests">
+                        {completedRequests.length > 0 ? (
+                            completedRequests.map(request => (
+                                <div 
+                                    key={request.id} 
+                                    className="help-request completed clickable"
+                                    onClick={(e) => handleCardClick(request, e)}
                                 >
-                                    Edit
-                                </button>
-                                <button 
-                                    className="show-location-btn"
-                                    onClick={() => setSelectedRequestId(request.id)}
-                                >
-                                    Show Location
-                                </button>
-                                <button 
-                                    className="change-location-btn"
-                                    onClick={() => handleChangeLocation(request)}
-                                >
-                                    Change Location
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <p>You haven&apos;t created any help requests yet.</p>
-                )}
+                                    <div className="help-request-content">
+                                        <h3>{request.title}</h3>
+                                        <p>{request.description}</p>
+                                    </div>
+                                    <div className="button-group">
+                                        <button 
+                                            className="details-btn"
+                                            onClick={() => navigate(`/help_requests/${request.id}`)}
+                                        >
+                                            Details
+                                        </button>
+                                        <button 
+                                            className="status-btn completed"
+                                            onClick={() => handleStatusUpdate(request)}
+                                        >
+                                            Mark Pending
+                                        </button>
+                                        <button 
+                                            className="show-location-btn"
+                                            onClick={() => setSelectedRequestId(request.id)}
+                                        >
+                                            Show Location
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No completed help requests.</p>
+                        )}
+                    </div>
+                </div>
             </div>
             
             <h2>All Help Requests</h2>

@@ -54,10 +54,10 @@ export const createHelpRequest = (requestData) => async (dispatch) => {
     }
 
 
-export const updateHelpRequestLocation = (helpRequestId, locationId, requestData = null) => async (dispatch) => {
+export const updateHelpRequestLocation = (helpRequestId, locationId, status, requestData = null) => async (dispatch) => {
     const body = requestData 
-        ? { ...requestData, locationId } 
-        : { locationId };
+        ? { ...requestData, locationId, status } 
+        : { locationId, status };
 
     const response = await fetch(`/api/help_requests/${helpRequestId}`, {
         method: 'PUT',
@@ -75,6 +75,23 @@ export const updateHelpRequestLocation = (helpRequestId, locationId, requestData
     }
     return null;
 };
+
+export const updateHelpRequestStatus = (helpRequestId, status) => async (dispatch) => {
+    const response = await fetch(`/api/hep_requests/${helpRequestId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ status })
+    });
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(updateHelpRequest(data.HelpRequest));
+        return data.HelpRequest;
+    }
+    return null;
+}
 
 export const deleteHelpRequest = (requestId) => async (dispatch) => {
     const response = await fetch(`/api/help_requests/${requestId}`, {

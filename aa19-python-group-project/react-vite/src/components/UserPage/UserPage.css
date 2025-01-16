@@ -32,6 +32,10 @@
     border-radius: 8px;
     background-color: #fff;
     transition: all 0.3s ease;
+    width: 100%;
+    height: fit-content;
+    margin-bottom: 1rem;
+    padding: 1rem;
 }
 
 .help-request:hover {
@@ -175,4 +179,28 @@ html {
 .change-location-btn {
     background-color: #34a853;
     color: white;
+}
+
+.help-requests-container {
+    display: flex;
+    gap: 2rem;
+    margin: 20px 0;
+}
+
+.pending-requests, 
+.completed-requests {
+    flex: 1;
+    min-width: 0;
+}
+
+.completed-requests .help-request {
+    background-color: #f8f8f8;
+    border-left: 4px solid #4CAF50;
+}
+
+.help-requests {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1rem;
 }
