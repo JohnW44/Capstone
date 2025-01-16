@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { createHelpRequest, updateHelpRequestLocation } from '../../redux/helpRequests';
+import { createHelpRequest, updateHelpRequestLocation, deleteHelpRequest } from '../../redux/helpRequests';
 import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import './CreateHelpRequestModal.css'
@@ -34,6 +34,16 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
             />
         );
     };
+
+    const handleDelete = async () => {
+        if (window.confirm('Are you sure you want to delete this help request')) {
+            const success = await dispatch(deleteHelpRequest(requestId));
+            if (success) {
+                closeModal();
+                onRequestCreated();
+            }
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -135,6 +145,15 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
                 {errors.submit && <div className='error'>{errors.submit}</div>}
 
                 <div className='modal-buttons'>
+                    {isEdit && (
+                        <button 
+                            type="button" 
+                            className='delete-btn'
+                            onClick={handleDelete}
+                        >
+                            Delete Request
+                        </button>
+                    )}
                     <button type="button" className='cancel-btn' onClick={closeModal}>
                         Cancel
                     </button>

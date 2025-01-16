@@ -1,7 +1,7 @@
 const LOAD_HELP_REQUESTS = 'helpRequests/LOAD';
 const ADD_HELP_REQUEST = 'helpRequests/ADD';
 const UPDATE_HELP_REQUEST = 'helpRequests/UPDATE';
-const REMOVE_HELP_REQUEST = 'helpRequests/REMOVE';
+const REMOVE_HELP_REQUEST = 'helpRequests/DELETE';
 
 const loadHelpRequests = (requests) => {
     return {
@@ -20,6 +20,11 @@ const updateHelpRequest = (request) => ({
     request
 });
 
+const deleteHelpRequestAction = (requestId) => ({
+    type: REMOVE_HELP_REQUEST,
+    requestId
+})
+
 export const fetchHelpRequests = () => async (dispatch) => {
     const response = await fetch('/api/help_requests');
     if (response.ok) {
@@ -32,7 +37,6 @@ export const fetchHelpRequests = () => async (dispatch) => {
 };
 
 export const createHelpRequest = (requestData) => async (dispatch) => {
-    try {
         const response = await fetch('/api/help_requests/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -44,13 +48,11 @@ export const createHelpRequest = (requestData) => async (dispatch) => {
             const newRequest = await response.json();
             dispatch(addHelpRequest(newRequest.HelpRequest));
             return newRequest.HelpRequest;
-        } else {
-            const errorData = await response.json();
-        }
-    } catch (error) {
-        console.error("Thunk error:", error);
+        } 
+        console.error("Error creating help request:", response.statusText);
+        return null;
     }
-}
+
 
 export const updateHelpRequestLocation = (helpRequestId, locationId, requestData = null) => async (dispatch) => {
     const body = requestData 
@@ -73,6 +75,19 @@ export const updateHelpRequestLocation = (helpRequestId, locationId, requestData
     }
     return null;
 };
+
+export const deleteHelpRequest = (requestId) => async (dispatch) => {
+    const response = await fetch(`/api/help_requests/${requestId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+    if (!response.ok) {
+        console.error("Error deleting help request", response.statusText);
+        return false;
+    }
+    dispatch(deleteHelpRequestAction(requestId));
+    return true;
+}
 
 const initialState = [];
 
