@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { createHelpRequest } from '../../redux/helpRequests';
+import { createHelpRequest, updateHelpRequestLocation } from '../../redux/helpRequests';
 import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import './CreateHelpRequestModal.css'
 
-function CreateHelpRequestModal({ onRequestCreated, initialLocation, initialFormData }) {
+function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFormData, initialLocation }) {
     const dispatch = useDispatch();
     const { closeModal, setModalContent } = useModal();
     const [formData, setFormData] = useState({
         title: initialFormData?.title || '',
         description: initialFormData?.description || '',
-        locationId: initialLocation?.id || null,
-        locationDetails: initialLocation || null
+        locationId: initialFormData?.locationId || initialLocation?.id || null,
+        locationDetails: initialFormData?.locationDetails || initialLocation || null
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +25,9 @@ function CreateHelpRequestModal({ onRequestCreated, initialLocation, initialForm
                         <CreateHelpRequestModal 
                             onRequestCreated={onRequestCreated}
                             initialLocation={location}
-                            initialFormData={formData} 
+                            initialFormData={formData}
+                            isEdit={isEdit}
+                            requestId={requestId}
                         />
                     );
                 }}
@@ -55,26 +57,31 @@ function CreateHelpRequestModal({ onRequestCreated, initialLocation, initialForm
         const requestData = { 
             title: formData.title.trim(),
             description: formData.description.trim(),
-            locationId: formData.locationId,
             categories: []
         };
-    
-        const newRequest = await dispatch(createHelpRequest(requestData));
-        setIsSubmitting(false);
-
-        if (!newRequest) {
-            setErrors({ submit: 'Failed to create help request' });
-            return;
+        
+        let response;
+        if (isEdit) {
+            response = await dispatch(updateHelpRequestLocation(requestId, formData.locationId, requestData));
+        } else {
+            response = await dispatch(createHelpRequest({
+                ...requestData, 
+                locationId: formData.locationId}));
         }
 
-        closeModal();
-        onRequestCreated(newRequest);
+        if (response) {
+            closeModal();
+            onRequestCreated(response);
+        } else {
+            setErrors({ submit: `Failed to ${isEdit ? 'update' : 'create'} help request` });
+        }
+        setIsSubmitting(false)
      
 };
 
     return (
         <div className='create-help-request-modal'>
-            <h2>Create New Help Request</h2>
+            <h2>{isEdit ? 'Edit Help Request' : 'Create New Help Request'}</h2>
             <form onSubmit={handleSubmit}>
                 <div className='form-group'>
                     <label htmlFor="title">Title</label>
@@ -136,14 +143,12 @@ function CreateHelpRequestModal({ onRequestCreated, initialLocation, initialForm
                         className='confirm-btn'
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Creating...' : 'Create Request'}
+                        {isSubmitting ? (isEdit ? 'Updating...' : 'Creating...') : (isEdit ? 'Update Request' : 'Create Request')}
                     </button>
                 </div>
             </form>
         </div>
     );
 }
-
-
 
 export default CreateHelpRequestModal;

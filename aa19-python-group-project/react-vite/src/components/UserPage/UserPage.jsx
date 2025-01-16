@@ -40,6 +40,20 @@ function UserPage() {
         );
     };
 
+    const handleEditRequest = (request) => {
+        setModalContent(
+            <CreateHelpRequestModal
+                initialFormData={request}
+                isEdit={true}
+                requestId={request.id}
+                onRequestCreated={() => {
+                    closeModal();
+                    dispatch(fetchHelpRequests());
+                }}
+            />
+        );
+    };
+
     useEffect(() => {
         if (!user) {
             navigate("/");
@@ -96,6 +110,18 @@ function UserPage() {
                                 <p>{request.description}</p>
                             </div>
                             <div className="button-group">
+                                <button 
+                                    className="details-btn"
+                                    onClick={() => navigate(`/help_requests/${request.id}`)}
+                                >
+                                    Details
+                                </button>
+                                <button 
+                                    className="edit-btn"
+                                    onClick={() => handleEditRequest(request)}
+                                >
+                                    Edit
+                                </button>
                                 <button 
                                     className="show-location-btn"
                                     onClick={() => setSelectedRequestId(request.id)}

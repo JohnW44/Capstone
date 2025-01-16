@@ -9,7 +9,7 @@
   }
   
   .location-search-input {
-    width: 100%;
+    width: 96.8%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -32,12 +32,13 @@
   }
   
   .cancel-btn {
-    background-color: #6c757d;
-    color: white;
+    background-color: #8d2208;
+    color: rgb(202, 30, 30);
+    font-weight: 900;
   }
   
   .confirm-btn {
-    background-color: #28a745;
+    background-color: #0fbd31;
     color: white;
   }
   
@@ -90,13 +91,14 @@
   
   .location-info h4 {
     margin: 0 0 5px 0;
-    color: #333;
+    color: #fff3bc;
   }
   
   .location-info p {
     margin: 0;
-    color: #666;
+    color: #abff8a;
     font-size: 14px;
+    font-weight: 600;
   }
   
   .location-actions {

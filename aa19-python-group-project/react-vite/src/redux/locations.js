@@ -43,7 +43,6 @@ export const createLocation = (locationData) => async (dispatch) => {
         }
         return null;
     } catch (error) {
-        console.error('Error creating location:', error);
         return null;
     }
 };
@@ -65,9 +64,6 @@ export const deleteLocation = (locationId) => async (dispatch) => {
 };
 
 const locationsReducer = (state = [], action) => {
-    console.log(" action", action.type, "@", new Date().toLocaleTimeString());
-    console.log(" prev state", state);
-    console.log(" action     ", action);
     
     let nextState;
     
@@ -89,7 +85,6 @@ const locationsReducer = (state = [], action) => {
             nextState = state;
     }
     
-    console.log(" next state", nextState);
     return nextState;
 };
 

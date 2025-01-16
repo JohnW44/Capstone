@@ -21,11 +21,9 @@ const updateHelpRequest = (request) => ({
 });
 
 export const fetchHelpRequests = () => async (dispatch) => {
-    console.log("Fetching help requests...");
     const response = await fetch('/api/help_requests');
     if (response.ok) {
         const data = await response.json();
-        console.log("Help Requests API Response:", data);
         dispatch(loadHelpRequests(data.HelpRequests));
         return data.HelpRequests;
     } else {
@@ -34,7 +32,6 @@ export const fetchHelpRequests = () => async (dispatch) => {
 };
 
 export const createHelpRequest = (requestData) => async (dispatch) => {
-    console.log("🚀 Starting createHelpRequest thunk with data:", requestData);
     try {
         const response = await fetch('/api/help_requests/', {
             method: 'POST',
@@ -42,32 +39,31 @@ export const createHelpRequest = (requestData) => async (dispatch) => {
             credentials: 'include',
             body: JSON.stringify(requestData)
         });
-        console.log("📨 API Response status:", response.status);
         
         if(response.ok) {
             const newRequest = await response.json();
-            console.log("✅ Successful API response:", newRequest);
             dispatch(addHelpRequest(newRequest.HelpRequest));
             return newRequest.HelpRequest;
         } else {
             const errorData = await response.json();
-            console.error("❌ API error:", errorData);
         }
     } catch (error) {
-        console.error("🔥 Thunk error:", error);
+        console.error("Thunk error:", error);
     }
 }
 
-export const updateHelpRequestLocation = (helpRequestId, locationId) => async (dispatch) => {
+export const updateHelpRequestLocation = (helpRequestId, locationId, requestData = null) => async (dispatch) => {
+    const body = requestData 
+        ? { ...requestData, locationId } 
+        : { locationId };
+
     const response = await fetch(`/api/help_requests/${helpRequestId}`, {
         method: 'PUT',
         headers: { 
             'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify({ 
-            locationId: locationId
-        })
+        body: JSON.stringify(body)
     });
 
     if (response.ok) {
@@ -81,9 +77,6 @@ export const updateHelpRequestLocation = (helpRequestId, locationId) => async (d
 const initialState = [];
 
 const helpRequestsReducer = (state = initialState, action) => {
-    console.log("🔄 Reducer received action:", action.type);
-    console.log("📥 Current state:", state);
-    console.log("📦 Action payload:", action);
     
     let nextState;
     switch (action.type) {
@@ -91,7 +84,6 @@ const helpRequestsReducer = (state = initialState, action) => {
             nextState = [...action.requests];
             break;
         case ADD_HELP_REQUEST:
-            console.log("➕ Adding new request:", action.request);
             nextState = [...state, action.request];
             break;
         case UPDATE_HELP_REQUEST:
@@ -106,7 +98,6 @@ const helpRequestsReducer = (state = initialState, action) => {
             nextState = state;
     }
     
-    console.log("📤 Next state:", nextState);
     return nextState;
 };
 

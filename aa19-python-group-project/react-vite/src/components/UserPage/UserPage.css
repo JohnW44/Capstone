@@ -128,5 +128,51 @@ html {
 
 .button-group {
     display: flex;
-    justify-content: space-around;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 15px;
+}
+
+.button-group button {
+    flex: 1;
+    min-width: 120px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.button-group button:active {
+    transform: scale(0.98);
+}
+
+.details-btn {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.details-btn:hover {
+    background-color: #357abd;
+}
+
+.edit-btn {
+    background-color: #f5a623;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #d4891d;
+}
+
+.show-location-btn {
+    background-color: #0066cc;
+    color: white;
+}
+
+.change-location-btn {
+    background-color: #34a853;
+    color: white;
 }
