@@ -114,12 +114,12 @@ function LocationChangeModal({ onLocationSelect, helpRequestId }) {
                 locationToUse = await dispatch(createLocation(locationData));
             }
 
-            if (locationToUse && helpRequestId) {
+            if (helpRequestId) {
                 await dispatch(updateHelpRequestLocation(helpRequestId, locationToUse.id));
+                closeModal();
+            } else {
+                onLocationSelect(locationToUse);
             }
-            
-            onLocationSelect(locationToUse);
-            closeModal();
             setIsSubmitting(false);
         }
     };

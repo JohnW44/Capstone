@@ -5,14 +5,14 @@ import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import './CreateHelpRequestModal.css'
 
-function CreateHelpRequestModal({ onRequestCreated }) {
+function CreateHelpRequestModal({ onRequestCreated, initialLocation, initialFormData }) {
     const dispatch = useDispatch();
     const { closeModal, setModalContent } = useModal();
     const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        locationId: null,
-        locationDetails: null
+        title: initialFormData?.title || '',
+        description: initialFormData?.description || '',
+        locationId: initialLocation?.id || null,
+        locationDetails: initialLocation || null
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,14 +21,11 @@ function CreateHelpRequestModal({ onRequestCreated }) {
         setModalContent(
             <LocationChangeModal 
                 onLocationSelect={(location) => {
-                    setFormData(prev => ({
-                        ...prev,
-                        locationId: location.id,
-                        locationDetails: location
-                    }));
                     setModalContent(
                         <CreateHelpRequestModal 
                             onRequestCreated={onRequestCreated}
+                            initialLocation={location}
+                            initialFormData={formData} 
                         />
                     );
                 }}
@@ -52,24 +49,28 @@ function CreateHelpRequestModal({ onRequestCreated }) {
             setErrors(prev => ({ ...prev, location: 'Location is required' }));
             return;
         }
-
-        setIsSubmitting(true);
-
-        const requestData ={ 
+    
+         setIsSubmitting(true);
+    
+        const requestData = { 
             title: formData.title.trim(),
             description: formData.description.trim(),
             locationId: formData.locationId,
             categories: []
         };
+    
         const newRequest = await dispatch(createHelpRequest(requestData));
-        if (newRequest) {
-            closeModal();
-            onRequestCreated(newRequest);
-        } else {
-            setErrors({ submit: 'Failed to create help request' })
-        }
         setIsSubmitting(false);
-    };
+
+        if (!newRequest) {
+            setErrors({ submit: 'Failed to create help request' });
+            return;
+        }
+
+        closeModal();
+        onRequestCreated(newRequest);
+     
+};
 
     return (
         <div className='create-help-request-modal'>
@@ -81,7 +82,10 @@ function CreateHelpRequestModal({ onRequestCreated }) {
                         id="title"
                         type="text"
                         value={formData.title}
-                        onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value}))}
+                        onChange={(e) => setFormData(prev => ({ 
+                            ...prev, 
+                            title: e.target.value
+                        }))}
                         placeholder="Enter title"
                         maxLength={100}
                     />
@@ -93,7 +97,10 @@ function CreateHelpRequestModal({ onRequestCreated }) {
                     <textarea
                         id="description"
                         value={formData.description}
-                        onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value}))}
+                        onChange={(e) => setFormData(prev => ({ 
+                            ...prev, 
+                            description: e.target.value
+                        }))}
                         placeholder='Describe what you need help with'
                         rows={4}
                     />
@@ -102,10 +109,10 @@ function CreateHelpRequestModal({ onRequestCreated }) {
 
                 <div className='form-group'>
                     <label>Location</label>
-                    {formData.locationDetails ? (
+                    {formData.locationId ? (
                         <div className='selected-location'>
-                            <p>{formData.locationDetails.name}</p>
-                            <p>{formData.locationDetails.address}</p>
+                            <p>{formData.locationDetails?.name}</p>
+                            <p>{formData.locationDetails?.address}</p>
                             <button type="button" onClick={handleLocationSelect}>
                                 Change Location
                             </button>
@@ -118,7 +125,7 @@ function CreateHelpRequestModal({ onRequestCreated }) {
                     {errors.location && <span className="error">{errors.location}</span>}
                 </div>
 
-                {errors.submit && <div className='errors'>{errors.submit}</div>}
+                {errors.submit && <div className='error'>{errors.submit}</div>}
 
                 <div className='modal-buttons'>
                     <button type="button" className='cancel-btn' onClick={closeModal}>

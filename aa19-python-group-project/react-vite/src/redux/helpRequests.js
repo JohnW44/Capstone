@@ -34,19 +34,27 @@ export const fetchHelpRequests = () => async (dispatch) => {
 };
 
 export const createHelpRequest = (requestData) => async (dispatch) => {
-    console.log("Creating help request with data:", requestData);
-    const response = await fetch('/api/help_requests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(requestData)
-    });
-    console.log("Response status:", response.status);
-    if(response.ok) {
-        const newRequest = await response.json();
-        console.log("New request data:", newRequest);
-        dispatch(addHelpRequest(newRequest.HelpRequest));
-        return newRequest.HelpRequest;
+    console.log("🚀 Starting createHelpRequest thunk with data:", requestData);
+    try {
+        const response = await fetch('/api/help_requests/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(requestData)
+        });
+        console.log("📨 API Response status:", response.status);
+        
+        if(response.ok) {
+            const newRequest = await response.json();
+            console.log("✅ Successful API response:", newRequest);
+            dispatch(addHelpRequest(newRequest.HelpRequest));
+            return newRequest.HelpRequest;
+        } else {
+            const errorData = await response.json();
+            console.error("❌ API error:", errorData);
+        }
+    } catch (error) {
+        console.error("🔥 Thunk error:", error);
     }
 }
 
@@ -73,10 +81,9 @@ export const updateHelpRequestLocation = (helpRequestId, locationId) => async (d
 const initialState = [];
 
 const helpRequestsReducer = (state = initialState, action) => {
-    console.log("Reducer received action:", action.type);
-    console.log(" action", action.type, "@", new Date().toLocaleTimeString());
-    console.log(" prev state", state);
-    console.log(" action     ", action);
+    console.log("🔄 Reducer received action:", action.type);
+    console.log("📥 Current state:", state);
+    console.log("📦 Action payload:", action);
     
     let nextState;
     switch (action.type) {
@@ -84,6 +91,7 @@ const helpRequestsReducer = (state = initialState, action) => {
             nextState = [...action.requests];
             break;
         case ADD_HELP_REQUEST:
+            console.log("➕ Adding new request:", action.request);
             nextState = [...state, action.request];
             break;
         case UPDATE_HELP_REQUEST:
@@ -98,7 +106,7 @@ const helpRequestsReducer = (state = initialState, action) => {
             nextState = state;
     }
     
-    console.log(" next state", nextState);
+    console.log("📤 Next state:", nextState);
     return nextState;
 };
 

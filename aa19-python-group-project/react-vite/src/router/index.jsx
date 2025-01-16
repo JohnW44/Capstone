@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
         element: <UserPage />
       },
       {
-        path: "help-requests/:requestId",
+        path: "help_requests/:requestId",
         element: <HelpRequestDetail />
       }
     ],

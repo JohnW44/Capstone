@@ -16,13 +16,14 @@ function UserPage() {
     const user = useSelector(state => state.session.user);
     const helpRequests = useSelector(state => state.helpRequests);
     const locations = useSelector(state => state.locations);
-    const { setModalContent } = useModal();
+    const { setModalContent, closeModal } = useModal();
 
     const handleCreateRequest = () => {
         setModalContent(
             <CreateHelpRequestModal
-                onRequestCreated={(newRequest) => {
-                    navigate(`/help_requests/${newRequest.id}`);
+                onRequestCreated={() => {
+                    closeModal();
+                    dispatch(fetchHelpRequests());
                 }}
             />
         );
