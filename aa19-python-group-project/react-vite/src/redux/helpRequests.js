@@ -44,6 +44,7 @@ export const createHelpRequest = (requestData) => async (dispatch) => {
     console.log("Response status:", response.status);
     if(response.ok) {
         const newRequest = await response.json();
+        console.log("New request data:", newRequest);
         dispatch(addHelpRequest(newRequest.HelpRequest));
         return newRequest.HelpRequest;
     }

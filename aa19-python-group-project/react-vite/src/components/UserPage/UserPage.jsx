@@ -63,7 +63,7 @@ function UserPage() {
         }
         
         if (request.userId === user.id) {
-            navigate(`/help-requests/${request.id}`);
+            navigate(`/help_requests/${request.id}`);
         }
     };
 
@@ -80,7 +80,6 @@ function UserPage() {
                     Create Help Request
                 </button>
             </div>
-            <h1>Welcome, {user.username}</h1>
             
             <h2>Your Help Requests</h2>
             <div className="help-requests">
