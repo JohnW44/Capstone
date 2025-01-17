@@ -12,6 +12,7 @@ export default function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const apiKey = import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY;
+  console.log('API Key:', apiKey)
   useEffect(() => {
     dispatch(thunkAuthenticate()).then(() => setIsLoaded(true));
   }, [dispatch]);
