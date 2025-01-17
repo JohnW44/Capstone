@@ -27,7 +27,7 @@ def get_review(reviewId):
     return {'review': review.to_dict()}
 
 
-@review_routes.route('/help-requests/<int:requestId>', methods=['POST'])
+@review_routes.route('/help_requests/<int:requestId>', methods=['POST'])
 @login_required
 def create_review(requestId):
     """
@@ -49,13 +49,13 @@ def create_review(requestId):
     if help_request.user_id != current_user.id:
         return {'message': "You must be the owner of the help request to review the volunteer"}, 403
     
-    volunteer = User.query.get(data.get('volunteerId'))
-    if not volunteer:
-        return {'message': "Volunteer couldn't be found"}, 404
+    # volunteer = User.query.get(data.get('volunteerId'))
+    # if not volunteer:
+    #     return {'message': "Volunteer couldn't be found"}, 404
     
     new_review = Review(
         user_id=current_user.id,
-        volunteer_id=data.get('volunteerId'),
+        volunteer_id=current_user.id,
         help_request_id=requestId,
         rating=data.get('rating'),
         comment=data.get('comment'),
@@ -122,3 +122,16 @@ def get_user_reviews(userId):
     """
     reviews = Review.query.filter_by(volunteer_id=userId).all()
     return {'reviews': [review.to_dict() for review in reviews]}
+
+
+@review_routes.route('/help_requests/<int:requestId>', methods=['GET'])
+def get_help_request_review(requestId):
+    """
+    Get the review for a specific help request
+    """
+    review = Review.query.filter_by(help_request_id=requestId).first()
+    
+    if not review:
+        return {'message': "Review couldn't be found"}, 404
+        
+    return {'review': review.to_dict()}

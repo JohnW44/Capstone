@@ -194,6 +194,12 @@ function UserPage() {
                                         >
                                             Show Location
                                         </button>
+                                        <button 
+                                            className="review-btn"
+                                            onClick={() => navigate(`/help_requests/${request.id}`)}
+                                        >
+                                             Leave Review
+                                        </button>
                                     </div>
                                 </div>
                             ))

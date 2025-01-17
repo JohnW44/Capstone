@@ -132,7 +132,7 @@
 }
 
 .status-btn.completed:hover {
-    background-color: #F57C00;
+    background-color: #f5e500;
 }
 
 .show-location-btn {
@@ -189,4 +189,17 @@
 .all-requests-title {
     margin-top: 10%;
     /* margin-bottom: 20px; */
+}
+
+.review-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.review-btn:hover {
+    background-color: #31d3fc;
 }

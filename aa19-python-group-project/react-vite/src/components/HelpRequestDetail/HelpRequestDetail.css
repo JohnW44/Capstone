@@ -2,20 +2,28 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    margin-top: 10%;
 }
 
 .help-request-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.help-request-header h1 {
+    margin: 0;
+    color: #333;
 }
 
 .status-badge {
     padding: 8px 16px;
     border-radius: 20px;
-    background-color: #e0e0e0;
+    background-color: #FF9800;
+    color: white;
     text-transform: capitalize;
+    font-weight: 500;
 }
 
 .help-request-content section {
@@ -48,4 +56,94 @@
 .delete-button {
     background-color: #f44336;
     color: white;
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ef9a9a;
+}
+
+.review-section {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.review-actions button,
+.create-review-btn,
+.actions-section button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    color: white;
+}
+
+.create-review-btn {
+    background-color: #4CAF50;
+}
+
+.create-review-btn:hover {
+    background-color: #45a049;
+}
+
+.review-actions button:first-child {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.review-actions button:first-child:hover {
+    background-color: #09ff00;
+}
+
+.review-actions button:last-child {
+    background-color: #f44336;
+}
+
+.review-actions button:last-child:hover {
+    background-color: #d32f2f;
+}
+
+.edit-button {
+    background-color: #2196F3;
+}
+
+.edit-button:hover {
+    background-color: #d219a4;
+}
+
+.delete-button {
+    background-color: #f44336;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+.review-display {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.rating {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FF9800;
 }
