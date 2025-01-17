@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import { useModal } from '../../context/Modal';
 import ReviewFormModal from '../ReviewFormModal/ReviewFormModal';
+import LocationChangeModal from "../LocationChangeModal/LocationChangeModal";
 import CreateHelpRequestModal from '../CreateHelpRequestModal/CreateHelpRequestModal';
 import { fetchHelpRequests } from "../../redux/helpRequests";
 import './HelpRequestDetail.css'
@@ -26,8 +27,11 @@ function HelpRequestDetail() {
     );
 
     useEffect(() => {
-        dispatch(fetchLocations());
-    }, [dispatch]);
+        if (requestId) {
+            dispatch(fetchHelpRequests());
+            dispatch(fetchLocations());
+        }
+    }, [dispatch, requestId]);
 
     useEffect(() => {
         if (requestId) {
@@ -70,7 +74,10 @@ function HelpRequestDetail() {
     const handleEditRequest = () => {
         setModalContent(
             <CreateHelpRequestModal
-                initialFormData={helpRequest}
+                initialFormData={{
+                    ...helpRequest,
+                    location: location
+                }}
                 isEdit={true}
                 requestId={requestId}
                 onRequestCreated={() => {
@@ -99,6 +106,19 @@ function HelpRequestDetail() {
                 setError(error.message);
             });
         }
+    };
+
+    const handleChangeLocation = () => {
+        setModalContent(
+            <LocationChangeModal
+                helpRequestId={requestId}
+                onLocationSelect={async () => {
+                    await dispatch(fetchHelpRequests());
+                    await dispatch(fetchLocations());
+                    closeModal();
+                }}
+            />
+        );
     };
 
     const handleReviewSubmit = (reviewData) => {
@@ -255,6 +275,12 @@ function HelpRequestDetail() {
                                 onClick={handleEditRequest}
                             >
                                 Edit Request
+                            </button>
+                            <button 
+                                className="change-location-button"
+                                onClick={handleChangeLocation}
+                            >
+                                Change Location
                             </button>
                             <button 
                                 className="delete-button"
