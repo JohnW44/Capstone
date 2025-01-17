@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom"
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import { useModal } from '../../context/Modal';
 import ReviewFormModal from '../ReviewFormModal/ReviewFormModal';
+import CreateHelpRequestModal from '../CreateHelpRequestModal/CreateHelpRequestModal';
+import { fetchHelpRequests } from "../../redux/helpRequests";
 import './HelpRequestDetail.css'
+import { fetchLocations } from "../../redux/locations";
 
 function HelpRequestDetail() {
     const { requestId } = useParams();
@@ -13,6 +16,7 @@ function HelpRequestDetail() {
     const [error, setError] = useState(null);
     const { setModalContent, closeModal } = useModal();
     const currentUser = useSelector(state => state.session.user);
+    const dispatch = useDispatch();
 
     const helpRequest = useSelector(state =>
         state.helpRequests.find(req => req.id === parseInt(requestId))
@@ -20,6 +24,10 @@ function HelpRequestDetail() {
     const location = useSelector(state => 
         state.locations.find(loc => loc.id === helpRequest?.locationId)
     );
+
+    useEffect(() => {
+        dispatch(fetchLocations());
+    }, [dispatch]);
 
     useEffect(() => {
         if (requestId) {
@@ -59,15 +67,42 @@ function HelpRequestDetail() {
         }
     };
 
+    const handleEditRequest = () => {
+        setModalContent(
+            <CreateHelpRequestModal
+                initialFormData={helpRequest}
+                isEdit={true}
+                requestId={requestId}
+                onRequestCreated={() => {
+                    closeModal();
+                    dispatch(fetchHelpRequests());
+                    dispatch(fetchLocations());
+                }}
+            />
+        );
+    };
+
+    const handleDeleteRequest = () => {
+        if (window.confirm('Are you sure you want to delete this help request?')) {
+            fetch(`/api/help_requests/${requestId}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    navigate('/user');
+                } else {
+                    throw new Error('Failed to delete help request');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting help request:', error);
+                setError(error.message);
+            });
+        }
+    };
+
     const handleReviewSubmit = (reviewData) => {
         setError(null);
-        
-        console.log('Help Request:', helpRequest);
-        console.log('Review Data to send:', {
-            rating: reviewData.rating,
-            comment: reviewData.comment,
-            volunteerId: currentUser.id
-        });
 
         const method = review ? 'PUT' : 'POST';
         const url = review 
@@ -132,10 +167,13 @@ function HelpRequestDetail() {
         height: '300px'
     };
 
-    console.log('Help Request Status:', helpRequest?.status);
-    console.log('Show Review Section:', showReviewSection);
-    console.log('Current Review:', review);
-    console.log('Can Manage Review:', canManageReview);
+    const center = location ? {
+        lat: Number(location.lat),
+        lng: Number(location.lng)
+    } : {
+        lat: 37.7749,
+        lng: -122.4194
+    };
 
     return (
         <>
@@ -164,17 +202,13 @@ function HelpRequestDetail() {
                             <div className="map-container">
                                 <GoogleMap
                                     mapContainerStyle={containerStyle}
-                                    center={{
-                                        lat: Number(location.lat),
-                                        lng: Number(location.lng)
-                                    }}
+                                    center={center}
                                     zoom={15}
                                 >
                                     <Marker
-                                        position={{
-                                            lat: Number(location.lat),
-                                            lng: Number(location.lng)
-                                        }}
+                                        key={location.id}
+                                        position={center}
+                                        title={location.address}
                                     />
                                 </GoogleMap>
                             </div>
@@ -214,19 +248,22 @@ function HelpRequestDetail() {
                 )}
 
                 <section className="actions-section">
-                    <button 
-                        className="edit-button"
-                        onClick={() => navigate(`/help_requests/${requestId}`)}
-                    >
-                        Edit Request
-                    </button>
-                    <button 
-                        className="delete-button"
-                        onClick={() => {
-                        }}
-                    >
-                        Delete Request
-                    </button>
+                    {canManageReview && helpRequest.status !== 'completed' && (
+                        <>
+                            <button 
+                                className="edit-button"
+                                onClick={handleEditRequest}
+                            >
+                                Edit Request
+                            </button>
+                            <button 
+                                className="delete-button"
+                                onClick={handleDeleteRequest}
+                            >
+                                Delete Request
+                            </button>
+                        </>
+                    )}
                 </section>
             </div>
         </div>

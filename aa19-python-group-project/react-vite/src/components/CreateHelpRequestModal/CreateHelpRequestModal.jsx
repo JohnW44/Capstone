@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { createHelpRequest, updateHelpRequestLocation, deleteHelpRequest } from '../../redux/helpRequests';
+import { createHelpRequest, updateHelpRequestLocation, deleteHelpRequest, fetchHelpRequests } from '../../redux/helpRequests';
 import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import './CreateHelpRequestModal.css'
