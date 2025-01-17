@@ -54,10 +54,12 @@ export const createHelpRequest = (requestData) => async (dispatch) => {
     }
 
 
-export const updateHelpRequestLocation = (helpRequestId, locationId, status, requestData = null) => async (dispatch) => {
-    const body = requestData 
-        ? { ...requestData, locationId, status } 
-        : { locationId, status };
+export const updateHelpRequestLocation = (helpRequestId, locationId, requestData = null, status = null) => async (dispatch) => {
+    const body = {
+        ...(requestData || {}),
+        locationId,
+        ...(status && { status })
+    };
 
     const response = await fetch(`/api/help_requests/${helpRequestId}`, {
         method: 'PUT',

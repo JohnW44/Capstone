@@ -101,7 +101,7 @@
 
 .completed-requests .help-request {
     background-color: #f8f8f8;
-    border-left: 4px solid #4CAF50;
+    /* border-left: 4px solid #4CAF50; */
 }
 
 .status-btn.pending:hover {
