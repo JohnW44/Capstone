@@ -77,7 +77,7 @@ export const updateHelpRequestLocation = (helpRequestId, locationId, status, req
 };
 
 export const updateHelpRequestStatus = (helpRequestId, status) => async (dispatch) => {
-    const response = await fetch(`/api/hep_requests/${helpRequestId}`, {
+    const response = await fetch(`/api/help_requests/${helpRequestId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
