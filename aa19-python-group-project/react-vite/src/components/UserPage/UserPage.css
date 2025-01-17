@@ -7,7 +7,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-top: 10%;
 }
 
 
@@ -37,13 +37,31 @@
     border-radius: 8px;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
+    position: relative;
+}
+
+.pending-requests .help-request:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.4); 
+    border-color: #4CAF50;
+}
+
+.completed-requests .help-request:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(255, 152, 0, 0.4); 
+    border-color: #FF9800;
+}
+
+.all-help-requests .help-request:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(33, 150, 243, 0.4); 
+    border-color: #2196F3;
 }
 
 .help-request:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: rgba(255, 255, 255, 0.95);
 }
 
 .help-request-content {
@@ -70,11 +88,15 @@
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
+    border: none; 
     border-radius: 4px;
-    border: none;
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s ease;
+}
+
+.create-request-btn:hover { 
+    background-color: #021581;
 }
 
 .completed-requests .help-request {
@@ -82,8 +104,89 @@
     border-left: 4px solid #4CAF50;
 }
 
+.status-btn.pending:hover {
+    background-color: #45a049;
+}
+
+.status-btn.completed {
+    background-color: #FF9800;
+    color: white;
+}
+
+.details-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.details-btn:hover {
+    background-color: #d219a4;
+}
+
+.edit-btn {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.edit-btn:hover {
+    background-color: #09ff00;
+}
+
+.status-btn.completed:hover {
+    background-color: #F57C00;
+}
+
+.show-location-btn {
+    background-color: #005304;
+    color: white
+} 
+
+.change-location-btn {
+    background-color: green;
+    color: white;
+}
+
+.show-location-btn:hover {
+    background-color: #F57C00;
+} 
+
+.change-location-btn:hover {
+    background-color: #7B1FA2;
+}
+
+
+.button-group button:focus {
+    outline: 2px solid #2196F3;
+    outline-offset: 2px;
+}
 
 .map-container {
     margin-top: 2rem;
     height: 400px;
+}
+
+.all-help-requests {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.all-help-requests .help-request {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.all-help-requests .help-request h3 {
+    margin-bottom: 0.5rem;
+}
+
+.all-help-requests .help-request p {
+    margin-bottom: 1rem;
+}
+
+.all-requests-title {
+    margin-top: 10%;
+    /* margin-bottom: 20px; */
 }

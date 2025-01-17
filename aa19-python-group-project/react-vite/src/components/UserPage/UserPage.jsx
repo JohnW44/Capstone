@@ -204,7 +204,7 @@ function UserPage() {
                 </div>
             </div>
             
-            <h2>All Help Requests</h2>
+            <h2 className="all-help-requests-title">All Help Requests</h2>
             <div className="all-help-requests">
                 {helpRequests.map(request => (
                     <div key={request.id} className="help-request">
@@ -221,7 +221,7 @@ function UserPage() {
                 ))}
             </div>
 
-            <h2>Location Map</h2>
+            <h2 className="all-requests-title">A Map</h2>
             <div className="map-container">
                 <MapComponent 
                     helpRequests={helpRequests}
