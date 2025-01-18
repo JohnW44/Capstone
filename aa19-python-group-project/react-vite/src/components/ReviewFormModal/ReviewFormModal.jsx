@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useModal } from '../../context/Modal';
 import './ReviewFormModal.css';
 
-function ReviewFormModal({ helpRequestId, onReviewSubmit, initialReview = null }) {
+function ReviewFormModal({ onReviewSubmit, initialReview = null }) {
     const [rating, setRating] = useState(initialReview?.rating || 5);
     const [comment, setComment] = useState(initialReview?.comment || '');
     const [errors, setErrors] = useState({});
