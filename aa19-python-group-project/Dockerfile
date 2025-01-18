@@ -19,6 +19,15 @@ RUN pip install psycopg2
 
 COPY . .
 
+WORKDIR /var/www/react-vite
+RUN npm install
+RUN npm run build
+
+
+WORKDIR /var/www
+RUN pip install -r requirements.txt
+RUN pip install psycopg2
+
 RUN flask db upgrade
 RUN flask seed all
 CMD gunicorn app:app

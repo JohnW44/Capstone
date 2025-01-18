@@ -19,4 +19,5 @@ export default defineConfig((mode) => ({
     },
   },
   envDir: path.resolve(__dirname, '..'),
+  envPrefix: 'VITE_',
 }));
