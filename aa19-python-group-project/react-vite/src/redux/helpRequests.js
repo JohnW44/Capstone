@@ -26,7 +26,7 @@ const deleteHelpRequestAction = (requestId) => ({
 })
 
 export const fetchHelpRequests = () => async (dispatch) => {
-    const response = await fetch('/api/help_requests');
+    const response = await fetch('/api/help_requests/');
     if (response.ok) {
         const data = await response.json();
         dispatch(loadHelpRequests(data.HelpRequests));

@@ -12,15 +12,30 @@ export default function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const apiKey = import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY;
-  console.log('API Key:', apiKey)
+  
+  
   useEffect(() => {
+    console.log('Environment Variables:', {
+      apiKey,
+      allEnv: import.meta.env
+    });
     dispatch(thunkAuthenticate()).then(() => setIsLoaded(true));
-  }, [dispatch]);
+  }, [dispatch, apiKey]);
+
+  if (!apiKey) {
+    console.error('No Google Maps API key found');
+    return <div>Error: Google Maps API key not configured</div>;
+  }
 
   return (
     <>
       <ModalProvider>
-        <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
+      <LoadScript 
+          googleMapsApiKey={apiKey} 
+          libraries={libraries}
+          onError={(error) => console.error('Maps Error:', error)}
+          onLoad={() => console.log('Maps Loaded')}
+        >
           <Navigation />
           {isLoaded && <Outlet />}
           <Modal />
