@@ -13,12 +13,12 @@ export default function Layout() {
   const [isLoaded, setIsLoaded] = useState(false);
   const apiKey = import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY;
   
-  
   useEffect(() => {
-    console.log('Environment Variables:', {
-      apiKey,
-      allEnv: import.meta.env
-    });
+    console.log('Vite Environment Mode:', import.meta.env.MODE);
+    console.log('All Vite Env Variables:', Object.keys(import.meta.env));
+    console.log('API Key exists:', !!apiKey);
+    console.log('API Key length:', apiKey?.length);
+    
     dispatch(thunkAuthenticate()).then(() => setIsLoaded(true));
   }, [dispatch, apiKey]);
 
