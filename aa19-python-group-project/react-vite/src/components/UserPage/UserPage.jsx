@@ -120,6 +120,13 @@ function UserPage() {
                                     <div className="help-request-content">
                                         <h3>{request.title}</h3>
                                         <p>{request.description}</p>
+                                        <div className="categories-list">
+                                            {request.categories?.map(category => (
+                                                <span key={category.id} className="category-tag">
+                                                    {category.name}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
                                     <div className="button-group">
                                         <button 
@@ -174,6 +181,13 @@ function UserPage() {
                                     <div className="help-request-content">
                                         <h3>{request.title}</h3>
                                         <p>{request.description}</p>
+                                        <div className="categories-list">
+                                            {request.categories?.map(category => (
+                                                <span key={category.id} className="category-tag">
+                                                    {category.name}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
                                     <div className="button-group">
                                         <button 
@@ -217,6 +231,13 @@ function UserPage() {
                         <h3>{request.title}</h3>
                         <p>Posted by: {request.username}</p>
                         <p>{request.description}</p>
+                        <div className="categories-list">
+                            {request.categories?.map(category => (
+                                <span key={category.id} className="category-tag">
+                                    {category.name}
+                                </span>
+                            ))}
+                        </div>
                         <button 
                             className="show-location-btn"
                             onClick={() => setSelectedRequestId(request.id)}

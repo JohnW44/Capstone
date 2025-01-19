@@ -2,6 +2,7 @@ const LOAD_HELP_REQUESTS = 'helpRequests/LOAD';
 const ADD_HELP_REQUEST = 'helpRequests/ADD';
 const UPDATE_HELP_REQUEST = 'helpRequests/UPDATE';
 const REMOVE_HELP_REQUEST = 'helpRequests/DELETE';
+const UPDATE_REQUEST_CATEGORIES = 'helpRequests/UPDATE_CATEGORIES';
 
 const loadHelpRequests = (requests) => {
     return {
@@ -24,6 +25,11 @@ const deleteHelpRequestAction = (requestId) => ({
     type: REMOVE_HELP_REQUEST,
     requestId
 })
+
+const updateRequestCategories = (request) => ({
+    type: UPDATE_REQUEST_CATEGORIES,
+    request
+});
 
 export const fetchHelpRequests = () => async (dispatch) => {
     const response = await fetch('/api/help_requests/');
@@ -108,6 +114,22 @@ export const deleteHelpRequest = (requestId) => async (dispatch) => {
     return true;
 }
 
+export const updateHelpRequestCategories = (requestId, categoryIds) => async (dispatch) => {
+    const response = await fetch(`/api/help_requests/${requestId}/categories`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ categoryIds })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(updateRequestCategories(data.HelpRequest));
+        return data.HelpRequest;
+    }
+    return null;
+};
+
 const initialState = [];
 
 const helpRequestsReducer = (state = initialState, action) => {
@@ -127,6 +149,11 @@ const helpRequestsReducer = (state = initialState, action) => {
             break;
         case REMOVE_HELP_REQUEST:
             nextState = state.filter(request => request.id !== action.requestId);
+            break;
+        case UPDATE_REQUEST_CATEGORIES:
+            nextState = state.map(request => 
+                request.id === action.request.id ? action.request : request
+            );
             break;
         default:
             nextState = state;

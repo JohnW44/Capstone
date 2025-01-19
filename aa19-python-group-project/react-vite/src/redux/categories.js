@@ -23,7 +23,7 @@ const removeCategory = (categoryId) => ({
     categoryId
 })
 
-export const fetchCategories = () async (dispatch) => {
+export const fetchCategories = () => async (dispatch) => {
     const response = await fetch('/api/categories/');
     if (response.ok) {
         const data = await response.json();
@@ -46,17 +46,20 @@ export const createCategory = (categoryData) => async (dispatch) => {
     }
 };
 
-
 export const updateUserCategory = (categoryId, categoryData) => async (dispatch) => {
-    const respone = await fetch(`/api/categories/${categoryId}`, {
+    const response = await fetch(`/api/categories/${categoryId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(categoryData)
     });
+    
     if (response.ok) {
-
+        const data = await response.json();
+        dispatch(updateCategory(data));
+        return data;
     }
+    return null;
 };
 
 export const deleteCategory = (categoryId) => async (dispatch) => {

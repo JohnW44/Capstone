@@ -9,6 +9,8 @@ import CreateHelpRequestModal from '../CreateHelpRequestModal/CreateHelpRequestM
 import { fetchHelpRequests } from "../../redux/helpRequests";
 import './HelpRequestDetail.css'
 import { fetchLocations } from "../../redux/locations";
+import { fetchCategories } from "../../redux/categories";
+import CategoryChangeModal from "../CategoryChangeModal/CategoryChangeModal";
 
 function HelpRequestDetail() {
     const { requestId } = useParams();
@@ -30,6 +32,7 @@ function HelpRequestDetail() {
         if (requestId) {
             dispatch(fetchHelpRequests());
             dispatch(fetchLocations());
+            dispatch(fetchCategories());
         }
     }, [dispatch, requestId]);
 
@@ -116,6 +119,19 @@ function HelpRequestDetail() {
                     await dispatch(fetchHelpRequests());
                     await dispatch(fetchLocations());
                     closeModal();
+                }}
+            />
+        );
+    };
+
+    const handleCategoryChange = () => {
+        setModalContent(
+            <CategoryChangeModal
+                helpRequestId={requestId}
+                initialCategories={helpRequest.categories?.map(cat => cat.id) || []}
+                onCategoryChange={() => {
+                    closeModal();
+                    dispatch(fetchHelpRequests());
                 }}
             />
         );
@@ -233,6 +249,29 @@ function HelpRequestDetail() {
                                 </GoogleMap>
                             </div>
                         </>
+                    )}
+                </section>
+
+                <section className="categories-section">
+                    <h2>Categories</h2>
+                    <div className="categories-list">
+                        {helpRequest.categories?.length > 0 ? (
+                            helpRequest.categories.map(category => (
+                                <span key={category.id} className="category-tag">
+                                    {category.name}
+                                </span>
+                            ))
+                        ) : (
+                            <p>No categories assigned</p>
+                        )}
+                    </div>
+                    {canManageReview && helpRequest.status !== 'completed' && (
+                        <button 
+                            className="change-categories-btn"
+                            onClick={handleCategoryChange}
+                        >
+                            Manage Categories
+                        </button>
                     )}
                 </section>
 

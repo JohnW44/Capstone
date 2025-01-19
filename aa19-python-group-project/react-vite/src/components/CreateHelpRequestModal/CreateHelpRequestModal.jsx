@@ -1,13 +1,18 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { createHelpRequest, updateHelpRequestLocation, deleteHelpRequest } from '../../redux/helpRequests';
 import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
+import { fetchCategories } from '../../redux/categories';
 import './CreateHelpRequestModal.css'
 
 function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFormData, initialLocation }) {
     const dispatch = useDispatch();
     const { closeModal, setModalContent } = useModal();
+    const categories = useSelector(state => state.categories);
+    const [selectedCategories, setSelectedCategories] = useState(
+        initialFormData?.categories?.map(cat => cat.id) || []
+    );
     const [formData, setFormData] = useState({
         title: initialFormData?.title || '',
         description: initialFormData?.description || '',
@@ -16,6 +21,10 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, [dispatch]);
 
     const handleLocationSelect = () => {
         setModalContent(
@@ -64,10 +73,10 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
     
          setIsSubmitting(true);
     
-        const requestData = { 
+        const requestData = {
             title: formData.title.trim(),
             description: formData.description.trim(),
-            categories: []
+            categories: selectedCategories
         };
         
         let response;
@@ -140,6 +149,28 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
                         </button>
                     )}
                     {errors.location && <span className="error">{errors.location}</span>}
+                </div>
+
+                <div className='form-group'>
+                    <label>Categories</label>
+                    <div className="categories-selection">
+                        {categories.map(category => (
+                            <label key={category.id} className="category-checkbox">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCategories.includes(category.id)}
+                                    onChange={() => {
+                                        setSelectedCategories(prev => 
+                                            prev.includes(category.id)
+                                                ? prev.filter(id => id !== category.id)
+                                                : [...prev, category.id]
+                                        );
+                                    }}
+                                />
+                                {category.name}
+                            </label>
+                        ))}
+                    </div>
                 </div>
 
                 {errors.submit && <div className='error'>{errors.submit}</div>}
