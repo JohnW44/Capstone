@@ -115,6 +115,9 @@ export const deleteHelpRequest = (requestId) => async (dispatch) => {
 }
 
 export const updateHelpRequestCategories = (requestId, categoryIds) => async (dispatch) => {
+    console.log('Updating categories for request:', requestId);
+    console.log('New category IDs:', categoryIds);
+
     const response = await fetch(`/api/help_requests/${requestId}/categories`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -122,8 +125,11 @@ export const updateHelpRequestCategories = (requestId, categoryIds) => async (di
         body: JSON.stringify({ categoryIds })
     });
 
+    console.log('Response status:', response.status);
+
     if (response.ok) {
         const data = await response.json();
+        console.log('Response data:', data);
         dispatch(updateRequestCategories(data.HelpRequest));
         return data.HelpRequest;
     }

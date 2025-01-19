@@ -143,5 +143,32 @@ def delete_help_request(requestId):
 
     return jsonify({"message": "Successfully deleted"})
 
+@help_request_routes.route('/<int:requestId>/categories', methods=['PUT'])
+@login_required
+def update_help_request_categories(requestId):
+    """
+    Updates categories for a help request
+    """
+    help_request = HelpRequest.query.get(requestId)
 
+    if not help_request:
+        return jsonify({"message": "Help request couldn't be found"}), 404
+
+    if help_request.user_id != current_user.id:
+        return jsonify({"message": "You must be the owner of this help request"}), 403
+
+    data = request.json
+    category_ids = data.get('categoryIds', [])
+    
+    help_request.categories = []
+    
+    for category_id in category_ids:
+        category = Category.query.get(category_id)
+        if category:
+            help_request.categories.append(category)
+
+    help_request.updated_at = datetime.now(timezone.utc)
+    db.session.commit()
+
+    return jsonify({"HelpRequest": help_request.to_dict()})
 

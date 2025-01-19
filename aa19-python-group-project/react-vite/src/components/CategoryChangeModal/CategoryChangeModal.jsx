@@ -22,14 +22,20 @@ function CategoryChangeModal({ helpRequestId, onCategoryChange, initialCategorie
             return;
         }
 
+        console.log('Submitting categories:', selectedCategories);
+
         const response = await dispatch(updateHelpRequestCategories(
             helpRequestId,
             selectedCategories
         ));
 
+        console.log('Update response:', response);
+
         if (response) {
+            console.log('Categories updated successfully');
             onCategoryChange();
         } else {
+            console.log('Failed to update categories');
             setError('Failed to update categories');
         }
     };
@@ -42,6 +48,11 @@ function CategoryChangeModal({ helpRequestId, onCategoryChange, initialCategorie
             return newSelection;
         });
     };
+
+    useEffect(() => {
+        console.log('Initial categories:', initialCategories);
+        console.log('Selected categories:', selectedCategories);
+    }, [initialCategories, selectedCategories]);
 
     return (
         <div className="category-change-modal">
