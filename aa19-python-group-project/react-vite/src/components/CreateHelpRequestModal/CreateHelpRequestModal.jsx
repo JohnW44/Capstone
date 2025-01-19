@@ -1,28 +1,30 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { createHelpRequest, updateHelpRequestLocation, deleteHelpRequest } from '../../redux/helpRequests';
+import { fetchLocations } from '../../redux/locations';
+import { fetchCategories } from '../../redux/categories';
 import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
-import { fetchCategories } from '../../redux/categories';
 import './CreateHelpRequestModal.css'
 
 function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFormData, initialLocation }) {
     const dispatch = useDispatch();
     const { closeModal, setModalContent } = useModal();
     const categories = useSelector(state => state.categories);
-    const [selectedCategories, setSelectedCategories] = useState(
-        initialFormData?.categories?.map(cat => cat.id) || []
-    );
     const [formData, setFormData] = useState({
         title: initialFormData?.title || '',
         description: initialFormData?.description || '',
         locationId: initialFormData?.locationId || initialLocation?.id || null,
         locationDetails: initialFormData?.locationDetails || initialLocation || null
     });
+    const [selectedCategories, setSelectedCategories] = useState(
+        initialFormData?.categories?.map(cat => cat.id) || []
+    );
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
+        dispatch(fetchLocations());
         dispatch(fetchCategories());
     }, [dispatch]);
 
@@ -30,11 +32,21 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
         setModalContent(
             <LocationChangeModal 
                 onLocationSelect={(location) => {
+                    setFormData(prev => ({
+                        ...prev,
+                        locationId: location.id,
+                        locationDetails: location
+                    }));
                     setModalContent(
                         <CreateHelpRequestModal 
                             onRequestCreated={onRequestCreated}
                             initialLocation={location}
-                            initialFormData={formData}
+                            initialFormData={{
+                                ...formData,
+                                locationId: location.id,
+                                locationDetails: location,
+                                categories: selectedCategories.map(id => ({ id }))
+                            }}
                             isEdit={isEdit}
                             requestId={requestId}
                         />
@@ -73,19 +85,22 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
     
          setIsSubmitting(true);
     
-        const requestData = {
+        const requestData = { 
             title: formData.title.trim(),
             description: formData.description.trim(),
-            categories: selectedCategories
+            categories: selectedCategories,
+            locationId: formData.locationId
         };
         
         let response;
         if (isEdit) {
-            response = await dispatch(updateHelpRequestLocation(requestId, formData.locationId, requestData));
+            response = await dispatch(updateHelpRequestLocation(
+                requestId, 
+                formData.locationId, 
+                requestData
+            ));
         } else {
-            response = await dispatch(createHelpRequest({
-                ...requestData, 
-                locationId: formData.locationId}));
+            response = await dispatch(createHelpRequest(requestData));
         }
 
         if (response) {
@@ -94,9 +109,8 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
         } else {
             setErrors({ submit: `Failed to ${isEdit ? 'update' : 'create'} help request` });
         }
-        setIsSubmitting(false)
-     
-};
+        setIsSubmitting(false);
+    };
 
     return (
         <div className='create-help-request-modal'>
@@ -139,12 +153,20 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
                         <div className='selected-location'>
                             <p>{formData.locationDetails?.name}</p>
                             <p>{formData.locationDetails?.address}</p>
-                            <button type="button" onClick={handleLocationSelect}>
+                            <button 
+                                type="button" 
+                                onClick={handleLocationSelect}
+                                className="change-location-btn"
+                            >
                                 Change Location
                             </button>
                         </div>
                     ) : (
-                        <button type="button" onClick={handleLocationSelect}>
+                        <button 
+                            type="button" 
+                            onClick={handleLocationSelect}
+                            className="select-location-btn"
+                        >
                             Select Location
                         </button>
                     )}
