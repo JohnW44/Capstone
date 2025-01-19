@@ -72,3 +72,50 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+.add-category-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.new-category-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.add-category-btn {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-category-btn:hover {
+    background-color: #218838;
+}
+
+.categories-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.category-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.category-checkbox:hover {
+    background-color: #f8f9fa;
+}

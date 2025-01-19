@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../../redux/categories';
+import { fetchCategories, createCategory } from '../../redux/categories';
 import { updateHelpRequestCategories } from '../../redux/helpRequests';
 import './CategoryChangeModal.css';
 
@@ -8,11 +8,28 @@ function CategoryChangeModal({ helpRequestId, onCategoryChange, initialCategorie
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
     const [selectedCategories, setSelectedCategories] = useState(initialCategories);
+    const [newCategoryName, setNewCategoryName] = useState('');
     const [error, setError] = useState(null);
 
     useEffect(() => {
         dispatch(fetchCategories());
     }, [dispatch]);
+
+    const handleAddCategory = async (e) => {
+        e.preventDefault();
+        if (!newCategoryName.trim()) return;
+
+        const response = await dispatch(createCategory({
+            name: newCategoryName.trim(),
+            description: 'Custom category'
+        }));
+
+        if (response) {
+            setSelectedCategories(prev => [...prev, response.id]);
+            setNewCategoryName('');
+            dispatch(fetchCategories());
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,37 +39,17 @@ function CategoryChangeModal({ helpRequestId, onCategoryChange, initialCategorie
             return;
         }
 
-        console.log('Submitting categories:', selectedCategories);
-
         const response = await dispatch(updateHelpRequestCategories(
             helpRequestId,
             selectedCategories
         ));
 
-        console.log('Update response:', response);
-
         if (response) {
-            console.log('Categories updated successfully');
             onCategoryChange();
         } else {
-            console.log('Failed to update categories');
             setError('Failed to update categories');
         }
     };
-
-    const handleCategoryToggle = (categoryId) => {
-        setSelectedCategories(prev => {
-            const newSelection = prev.includes(categoryId) 
-                ? prev.filter(id => id !== categoryId)
-                : [...prev, categoryId];
-            return newSelection;
-        });
-    };
-
-    useEffect(() => {
-        console.log('Initial categories:', initialCategories);
-        console.log('Selected categories:', selectedCategories);
-    }, [initialCategories, selectedCategories]);
 
     return (
         <div className="category-change-modal">
@@ -60,26 +57,46 @@ function CategoryChangeModal({ helpRequestId, onCategoryChange, initialCategorie
             {error && <div className="error-message">{error}</div>}
             
             <form onSubmit={handleSubmit}>
+                {/* Add category input */}
+                <div className="add-category-form">
+                    <input
+                        type="text"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        placeholder="New category name"
+                        className="new-category-input"
+                    />
+                    <button 
+                        type="button"
+                        onClick={handleAddCategory}
+                        className="add-category-btn"
+                    >
+                        Add
+                    </button>
+                </div>
+
                 <div className="category-list">
-                    {categories.length === 0 ? (
-                        <p>No categories available</p>
-                    ) : (
-                        categories.map(category => (
-                            <label key={category.id} className="category-item">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedCategories.includes(category.id)}
-                                    onChange={() => handleCategoryToggle(category.id)}
-                                />
-                                <div className="category-info">
-                                    <span className="category-name">{category.name}</span>
-                                    {category.description && (
-                                        <span className="category-description">{category.description}</span>
-                                    )}
-                                </div>
-                            </label>
-                        ))
-                    )}
+                    {categories.map(category => (
+                        <label key={category.id} className="category-item">
+                            <input
+                                type="checkbox"
+                                checked={selectedCategories.includes(category.id)}
+                                onChange={() => {
+                                    setSelectedCategories(prev => 
+                                        prev.includes(category.id)
+                                            ? prev.filter(id => id !== category.id)
+                                            : [...prev, category.id]
+                                    );
+                                }}
+                            />
+                            <div className="category-info">
+                                <span className="category-name">{category.name}</span>
+                                {category.description && (
+                                    <span className="category-description">{category.description}</span>
+                                )}
+                            </div>
+                        </label>
+                    ))}
                 </div>
 
                 <div className="modal-buttons">

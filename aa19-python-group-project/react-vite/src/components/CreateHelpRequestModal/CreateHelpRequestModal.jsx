@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { createHelpRequest, updateHelpRequestLocation, deleteHelpRequest } from '../../redux/helpRequests';
 import { fetchLocations } from '../../redux/locations';
-import { fetchCategories } from '../../redux/categories';
+import { fetchCategories, createCategory } from '../../redux/categories';
 import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import './CreateHelpRequestModal.css'
@@ -22,6 +22,7 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
     );
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
 
     useEffect(() => {
         dispatch(fetchLocations());
@@ -112,6 +113,22 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
         setIsSubmitting(false);
     };
 
+    const handleAddCategory = async (e) => {
+        e.preventDefault();
+        if (!newCategoryName.trim()) return;
+
+        const response = await dispatch(createCategory({
+            name: newCategoryName.trim(),
+            description: 'Custom category'
+        }));
+
+        if (response) {
+            setSelectedCategories(prev => [...prev, response.id]);
+            setNewCategoryName('');
+            dispatch(fetchCategories());
+        }
+    };
+
     return (
         <div className='create-help-request-modal'>
             <h2>{isEdit ? 'Edit Help Request' : 'Create New Help Request'}</h2>
@@ -175,6 +192,22 @@ function CreateHelpRequestModal({ onRequestCreated, requestId, isEdit, initialFo
 
                 <div className='form-group'>
                     <label>Categories</label>
+                    <div className="add-category-form">
+                        <input
+                            type="text"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                            placeholder="New category name"
+                            className="new-category-input"
+                        />
+                        <button 
+                            type="button"
+                            onClick={handleAddCategory}
+                            className="add-category-btn"
+                        >
+                            Add
+                        </button>
+                    </div>
                     <div className="categories-selection">
                         {categories.map(category => (
                             <label key={category.id} className="category-checkbox">
