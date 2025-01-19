@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories, createCategory } from '../../redux/categories';
+import { fetchCategories, createCategory, deleteCategory } from '../../redux/categories';
 import { updateHelpRequestCategories } from '../../redux/helpRequests';
 import './CategoryChangeModal.css';
 
@@ -51,6 +51,16 @@ function CategoryChangeModal({ helpRequestId, onCategoryChange, initialCategorie
         }
     };
 
+    const handleDeleteCategory = async (categoryId) => {
+        const response = await dispatch(deleteCategory(categoryId));
+        if (response) {
+            setSelectedCategories(prev => prev.filter(id => id !== categoryId));
+            dispatch(fetchCategories());
+        } else {
+            setError('Failed to delete category');
+        }
+    };
+
     return (
         <div className="category-change-modal">
             <h2>Change Categories</h2>
@@ -95,6 +105,18 @@ function CategoryChangeModal({ helpRequestId, onCategoryChange, initialCategorie
                                     <span className="category-description">{category.description}</span>
                                 )}
                             </div>
+                            {!category.is_default && (
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleDeleteCategory(category.id);
+                                    }}
+                                    className="delete-category-btn"
+                                >
+                                    ×
+                                </button>
+                            )}
                         </label>
                     ))}
                 </div>

@@ -32,12 +32,9 @@
 .category-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
 }
 
 .category-item:hover {
@@ -51,9 +48,8 @@
 }
 
 .category-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    flex: 1;
+    margin: 0 10px;
 }
 
 .category-name {
@@ -150,4 +146,18 @@
 
 .add-category-btn:hover {
     background-color: #218838;
+}
+
+.delete-category-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 8px;
+    margin-left: auto;
+}
+
+.delete-category-btn:hover {
+    color: #c82333;
 }
