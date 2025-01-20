@@ -6,10 +6,10 @@
   
   .login-form h1 {
     font-size: 28px;
-    color: #333;
+    color: rgb(248, 218, 163);
     margin-bottom: 25px;
     text-align: center;
-    border-bottom: 2px solid #0066cc;
+    border-bottom: 2px solid #7a1499;
     padding-bottom: 10px;
   }
   
@@ -24,7 +24,7 @@
     flex-direction: column;
     gap: 5px;
     font-weight: 500;
-    color: #333;
+    color: rgb(247, 231, 202);
   }
   
   .login-form input {

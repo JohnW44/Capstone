@@ -5,6 +5,7 @@ import "./LandingPage.css";
 import { useModal } from "../../context/Modal";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
+import logo from '../../../site-images/no-worries-logo.png';
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function LandingPage() {
   return (
     <div className="landing-container">
       <div className="header-section">
-        <h1>No Worries</h1>
+        <img src={logo} alt="No Worries Logo" className="header-logo" />
         <p className="tagline">
           A way for seniors to connect with the neighborhood for help
         </p>
