@@ -31,6 +31,20 @@ function LoginFormModal() {
     }
   };
 
+  const handleDemoLogin = (e) => {
+    e.preventDefault();
+    dispatch(thunkLogin({
+      email: "demo@aa.io",
+      password: "password"
+    }))
+      .then(response => {
+        if (!response) {
+          closeModal();
+          navigate("/user");
+        }
+      });
+  };
+
   return (
     <>
     <div className="login-form">
@@ -57,6 +71,7 @@ function LoginFormModal() {
         </label>
         {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
+        <button type="button" onClick={handleDemoLogin}>Demo User</button>
       </form>
       </div>
     </>

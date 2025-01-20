@@ -53,7 +53,7 @@ function LandingPage() {
         setCurrentImage(newImage);
         setIsTransitioning(false);
       }, 2000);
-    }, 5000);
+    }, 7000);
 
     return () => clearInterval(interval);
   }, [nextImage, allImages]);

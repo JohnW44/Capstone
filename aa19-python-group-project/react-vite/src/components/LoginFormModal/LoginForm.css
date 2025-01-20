@@ -60,3 +60,12 @@
     margin: 5px 0;
     font-size: 14px;
   }
+  
+  .login-form button[type="button"] {
+    background-color: #28a745;
+    margin-top: 10px;
+  }
+  
+  .login-form button[type="button"]:hover {
+    background-color: #218838;
+  }
