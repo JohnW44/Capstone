@@ -10,6 +10,8 @@ import needHelpImage from '../../../site-images/gardener.jpeg';
 import wantHelpImage from '../../../site-images/coupleWalking.jpeg';
 import defaultImage from '../../../site-images/beach.jpeg';
 import loginImage from '../../../site-images/pexels-mart-production-7330165.jpg';
+import yoga from '../../../site-images/yoga.jpg';
+import garden from '../../../site-images/Garden2.jpg'
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -21,6 +23,8 @@ function LandingPage() {
     needHelpImage,
     wantHelpImage,
     loginImage,
+    yoga,
+    garden
   ], []);
 
   const [currentImage, setCurrentImage] = useState(defaultImage);
@@ -80,18 +84,19 @@ function LandingPage() {
         <p className="tagline">
           A way for seniors to connect with the neighborhood for help
         </p>
-        <div className="feature-image-container">
-          <img 
-            src={currentImage}
-            alt="Feature" 
-            className="feature-image current"
-          />
-          <img 
-            src={nextImage}
-            alt="Feature" 
-            className={`feature-image next ${isTransitioning ? 'fade-in' : ''}`}
-          />
-        </div>
+      </div>
+
+      <div className="feature-image-container">
+        <img 
+          src={currentImage}
+          alt="Feature" 
+          className="feature-image current"
+        />
+        <img 
+          src={nextImage}
+          alt="Feature" 
+          className={`feature-image next ${isTransitioning ? 'fade-in' : ''}`}
+        />
       </div>
 
       <div className="main-buttons">
