@@ -80,3 +80,36 @@
   color: white;
   margin-bottom: 75%;
 }
+
+.feature-image-container {
+  position: relative;
+  width: 80%;
+  max-width: 800px;
+  margin: 20px auto;
+  height: 400px;
+  overflow: hidden;
+}
+
+.feature-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.feature-image.current {
+  z-index: 1;
+}
+
+.feature-image.next {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+}
+
+.feature-image.next.fade-in {
+  opacity: 1;
+}
