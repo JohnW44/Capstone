@@ -32,7 +32,7 @@
 
 
 .help-request {
-    background-color: white;
+    background-color: rgb(132, 0, 255);
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 1.5rem;
@@ -61,7 +61,7 @@
 }
 
 .help-request:hover {
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(7, 32, 145, 0.95);
 }
 
 .help-request-content {
@@ -100,12 +100,17 @@
 }
 
 .completed-requests .help-request {
-    background-color: #f8f8f8;
+    background-color: #209e00;
+    /* border-left: 4px solid #4CAF50; */
+}
+
+.completed-requests .help-request:hover {
+    background-color: #0f4402;
     /* border-left: 4px solid #4CAF50; */
 }
 
 .status-btn.pending:hover {
-    background-color: #45a049;
+    background-color: #005f05;
 }
 
 .status-btn.completed {

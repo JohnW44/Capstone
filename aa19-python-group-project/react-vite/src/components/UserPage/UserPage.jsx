@@ -109,6 +109,7 @@ function UserPage() {
             <div className="help-requests-container">
                 <div className="pending-requests">
                     <h2>Your Active Help Requests</h2>
+                    <h4>click the task card for Details</h4>
                     <div className="help-requests">
                         {pendingRequests.length > 0 ? (
                             pendingRequests.map(request => (
@@ -170,6 +171,7 @@ function UserPage() {
 
                 <div className="completed-requests">
                     <h2>Completed Help Requests</h2>
+                    <h4>Don&apos;t forget to leave a review!</h4>
                     <div className="help-requests">
                         {completedRequests.length > 0 ? (
                             completedRequests.map(request => (
@@ -226,7 +228,9 @@ function UserPage() {
             
             <h2 className="all-help-requests-title">All Help Requests</h2>
             <div className="all-help-requests">
-                {helpRequests.map(request => (
+                {helpRequests
+                    .filter(request => request.status !== 'completed')
+                    .map(request => (
                     <div key={request.id} className="help-request">
                         <h3>{request.title}</h3>
                         <p>Posted by: {request.username}</p>
@@ -248,7 +252,7 @@ function UserPage() {
                 ))}
             </div>
 
-            <h2 className="all-requests-title">A Map</h2>
+            <h2 className="all-requests-title">Map of help requests in your area</h2>
             <div className="map-container">
                 <MapComponent 
                     helpRequests={helpRequests}

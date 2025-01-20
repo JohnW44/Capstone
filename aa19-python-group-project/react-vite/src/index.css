@@ -1,3 +1,21 @@
+:root {
+  --background-color: #1a1a1a;
+  --text-color: #f5f5f5;
+}
 
- 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+
+.category-tag {
+  color: rgb(11, 11, 172);
+}
 

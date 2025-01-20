@@ -13,12 +13,25 @@ function Navigation() {
   return (
     <nav className="navigation-container">
       <ul className="nav-list">
-        <li>
-          <NavLink to="/user" className="nav-link">Home</NavLink>
-        </li>
-        <li>
-          <ProfileButton />
-        </li>
+        <div className="left-nav">
+          <li>
+            <NavLink to="/user" className="logo-link">
+              <img 
+                src="../../../site-images/no-worries-logo-nav.png" 
+                alt="Logo" 
+                className="nav-logo"
+              />
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/user" className="nav-link">Home</NavLink>
+          </li>
+        </div>
+        <div className="right-nav">
+          <li>
+            <ProfileButton />
+          </li>
+        </div>
       </ul>
     </nav>
   );

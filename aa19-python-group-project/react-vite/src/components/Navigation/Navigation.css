@@ -1,6 +1,6 @@
 
 .navigation-container {
-  background-color: #ffffff;
+  background-color: #465384;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   padding: 20px 40px;
   position: fixed;
@@ -8,18 +8,40 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  border-bottom: 2px solid #0066cc;
+  border-bottom: 2px solid #2cff25;
+}
+
+.nav-logo {
+  height: 120px;
+  width: auto;
+  /* margin-right: 10px; */
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
 }
 
 .nav-list {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  list-style: none;
+  width: 100%;
+  padding: 0 20px;
   margin: 0;
-  padding: 0;
-  max-width: 1200px;
-  margin: 0 auto;
+  list-style: none;
+}
+
+.left-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.right-nav {
+  display: flex;
+  align-items: center;
 }
 
 .nav-link {
@@ -57,7 +79,7 @@
 }
 
 .profile-button:hover {
-  color: #0066cc;
+  color: #a84cf3;
   transform: scale(1.1);
 }
 
@@ -108,7 +130,7 @@
 .user-info {
   font-size: 18px;
   font-weight: 500;
-  padding: 12px !important;
+  padding: 12px;
   background-color: #f8f8f8;
   border-radius: 8px;
   margin-bottom: 8px;

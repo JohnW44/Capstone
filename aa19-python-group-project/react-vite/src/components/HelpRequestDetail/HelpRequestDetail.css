@@ -2,7 +2,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    margin-top: 10%;
+    margin-top: 12%;
 }
 
 .help-request-header {
@@ -14,7 +14,7 @@
 
 .help-request-header h1 {
     margin: 0;
-    color: #333;
+    color: #ffffff;
 }
 
 .status-badge {
@@ -24,6 +24,7 @@
     color: white;
     text-transform: capitalize;
     font-weight: 500;
+    /* margin-top: 12%; */
 }
 
 .help-request-content section {
@@ -41,30 +42,39 @@
     gap: 10px;
 }
 
-.actions-section button {
+.actions-section button,
+.change-categories-btn {
     padding: 10px 20px;
     border-radius: 4px;
     border: none;
     cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    color: white;
 }
 
 .edit-button {
     background-color: #4CAF50;
-    color: white;
+}
+
+.edit-button:hover {
+    background-color: #aa41ff;
 }
 
 .delete-button {
     background-color: #f44336;
-    color: white;
 }
 
-.error-message {
-    background-color: #ffebee;
-    color: #c62828;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ef9a9a;
+.delete-button:hover {
+    background-color: #fae73b;
+}
+
+.change-categories-btn {
+    background-color: #2196F3;
+}
+
+.change-categories-btn:hover {
+    background-color: #d219a4;
 }
 
 .review-section {
@@ -76,6 +86,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.review-section h2{
+    color: black;
+}
+
 .review-actions {
     display: flex;
     gap: 10px;
@@ -83,8 +97,7 @@
 }
 
 .review-actions button,
-.create-review-btn,
-.actions-section button {
+.create-review-btn {
     padding: 8px 16px;
     border-radius: 4px;
     border: none;
@@ -120,24 +133,9 @@
     color:#c62828
 }
 
-.edit-button {
-    background-color: #2196F3;
-}
-
-.edit-button:hover {
-    background-color: #d219a4;
-}
-
-.delete-button {
-    background-color: #f44336;
-}
-
-.delete-button:hover {
-    background-color: #fae73b;
-}
-
 .review-display {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
+    color: black;
     padding: 15px;
     border-radius: 4px;
     margin-top: 10px;
@@ -147,4 +145,16 @@
     font-weight: bold;
     margin-bottom: 10px;
     color: #FF9800;
+}
+
+.change-location-button {
+    background-color: #008648;
+}
+
+.change-location-button:hover {
+    background-color: #3e3bfa;
+}
+
+.category-tag {
+    background-color: #2196F3;
 }
