@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
+import logoImage from "../../../site-images/no-worries-logo-nav.png"
 import "./Navigation.css";
 
 function Navigation() {
@@ -17,7 +18,7 @@ function Navigation() {
           <li>
             <NavLink to="/user" className="logo-link">
               <img 
-                src="../../../site-images/no-worries-logo-nav.png" 
+                src={logoImage}
                 alt="Logo" 
                 className="nav-logo"
               />
