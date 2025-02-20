@@ -2,14 +2,15 @@ import { defineConfig } from "vite";
 import eslintPlugin from "vite-plugin-eslint";
 import react from "@vitejs/plugin-react";
 import path from 'path'
+import { ConfigEnv } from "vite";
 
 // https://vitejs.dev/config/
-export default defineConfig((mode) => ({
+export default defineConfig((mode: ConfigEnv) => ({
   plugins: [
     react(),
     eslintPlugin({
       lintOnStart: true,
-      failOnError: mode === "production",
+      failOnError: mode.mode === "production",
     }),
   ],
   server: {
@@ -20,4 +21,10 @@ export default defineConfig((mode) => ({
   },
   envDir: path.resolve(__dirname, '..'),
   envPrefix: 'VITE_',
+  build: {
+    sourcemap: true,
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
+  }
 }));
