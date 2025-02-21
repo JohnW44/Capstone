@@ -3,12 +3,20 @@ import {
   applyMiddleware,
   compose,
   combineReducers,
+  PreloadedState,
 } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import helpRequestsReducer from "./helpRequests";
 import locationsReducer from "./locations";
 import categoriesReducer from "./categories";
+
+// Declare Global augmentation for redux devtools extension
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+  }
+}
 
 const rootReducer = combineReducers({
   session: sessionReducer,
@@ -27,7 +35,11 @@ if (import.meta.env.MODE === "production") {
   enhancer = composeEnhancers(applyMiddleware(thunk, logger));
 }
 
-const configureStore = (preloadedState) => {
+export type RootState = ReturnType<typeof rootReducer>; //this gets the type of combined reducers
+export type AppStore = Store<RootState>
+export type AppDispatch = AppStore['dispatch'] 
+
+const configureStore = (preloadedState?: PreloadedState<RootState>): Store => {
   return createStore(rootReducer, preloadedState, enhancer);
 };
 
