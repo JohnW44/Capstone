@@ -4,6 +4,7 @@ import {
   compose,
   combineReducers,
   PreloadedState,
+  Store
 } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
@@ -39,7 +40,7 @@ export type RootState = ReturnType<typeof rootReducer>; //this gets the type of 
 export type AppStore = Store<RootState>
 export type AppDispatch = AppStore['dispatch'] 
 
-const configureStore = (preloadedState?: PreloadedState<RootState>): Store => {
+const configureStore = (preloadedState?: PreloadedState<RootState>): Store<RootState> => {
   return createStore(rootReducer, preloadedState, enhancer);
 };
 
