@@ -7,7 +7,7 @@ import {
   Store
 } from "redux";
 import thunk from "redux-thunk";
-import sessionReducer from "./session";
+import sessionReducer from "./session.ts";
 import helpRequestsReducer from "./helpRequests";
 import locationsReducer from "./locations";
 import categoriesReducer from "./categories";
