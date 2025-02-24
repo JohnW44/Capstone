@@ -1,16 +1,40 @@
+import { AppDispatch } from "./store";
+
+//Types
+interface User{
+  id: number;
+  email: string;
+  username: string;
+}
+
+interface SessionState {
+  user: User | null;
+}
+
+interface SetUserAction {
+  type: typeof SET_USER;
+  payload: User;
+}
+
+interface RemoveUserAction {
+  type: typeof REMOVE_USER;
+}
+
+type SessionActionTypes = SetUserAction | RemoveUserAction;
+
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 
-const setUser = (user) => ({
+const setUser = (user: User): SetUserAction => ({
   type: SET_USER,
   payload: user
 });
 
-const removeUser = () => ({
+const removeUser = (): RemoveUserAction => ({
   type: REMOVE_USER
 });
 
-export const thunkAuthenticate = () => async (dispatch) => {
+export const thunkAuthenticate = () => async (dispatch: AppDispatch) => {
 	const response = await fetch("/api/auth/");
 	if (response.ok) {
 		const data = await response.json();
@@ -23,7 +47,17 @@ export const thunkAuthenticate = () => async (dispatch) => {
   console.log("Auth check response:", response);
 };
 
-export const thunkLogin = (credentials) => async dispatch => {
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+interface ErrorResponse {
+  server?: string;
+  [key: string]: string | undefined;
+}
+
+export const thunkLogin = (credentials: LoginCredentials) => async (dispatch: AppDispatch) => {
   const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -41,7 +75,11 @@ export const thunkLogin = (credentials) => async dispatch => {
   }
 };
 
-export const thunkSignup = (user) => async (dispatch) => {
+interface SignupData extends LoginCredentials {
+  username: string;
+}
+
+export const thunkSignup = (user: SignupData) => async (dispatch: AppDispatch) => {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -52,21 +90,21 @@ export const thunkSignup = (user) => async (dispatch) => {
     const data = await response.json();
     dispatch(setUser(data));
   } else if (response.status < 500) {
-    const errorMessages = await response.json();
+    const errorMessages: ErrorResponse = await response.json();
     return errorMessages
   } else {
     return { server: "Something went wrong. Please try again" }
   }
 };
 
-export const thunkLogout = () => async (dispatch) => {
+export const thunkLogout = () => async (dispatch: AppDispatch) => {
   await fetch("/api/auth/logout");
   dispatch(removeUser());
 };
 
-const initialState = { user: null };
+const initialState: SessionState = { user: null };
 
-function sessionReducer(state = initialState, action) {
+function sessionReducer(state: SessionState = initialState, action: SessionActionTypes): SessionState {
   switch (action.type) {
     case SET_USER:
       return { ...state, user: action.payload };
