@@ -49,8 +49,14 @@ Project is created with:
       ```bash
       pipenv install -r requirements.txt
       ```
+3. Install TypeScript and frontend dependencies
+      ```bash
+      cd react-vite
+      npm install --save-dev typescript @types/react @types/react-dom @types/node @types/google.maps @types/react-redux @types/react-router-dom
+      npm i
+      ```
 
-3. Create a .env file
+4. Create a .env file
    ```
    FLASK_APP=app
    FLASK_ENV=development
@@ -60,7 +66,7 @@ Project is created with:
    VITE_APP_GOOGLE_MAPS_API_KEY=<your-google-maps-api-key>
    ```
 
-4. For the backend get into your pipenv, migrate your database, seed your database, and run your Flask app
+5. For the backend get into your pipenv, migrate your database, seed your database, and run your Flask app
 
    ```bash
    pipenv shell
@@ -78,7 +84,7 @@ Project is created with:
    flask run
    ```
 
-5. To run the React frontend, cd into react-vite, run `npm i` to install dependencies.
+6. To run the React frontend, cd into react-vite, run `npm i` to install dependencies.
 
     Next run `npm run dev`
 
