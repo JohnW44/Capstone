@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchHelpRequests, updateHelpRequestStatus,  } from "../../redux/helpRequests";
-import { fetchLocations } from "../../redux/locations";
+import { fetchLocations } from "../../redux/locationsSlice";
 import { useModal } from '../../context/Modal';
 import CreateHelpRequestModal from '../CreateHelpRequestModal/CreateHelpRequestModal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories, createCategory, deleteCategory } from '../../redux/categories';
+import { fetchCategories, createCategory, deleteCategory } from '../../redux/categoriesSlice';
 import { updateHelpRequestCategories } from '../../redux/helpRequests';
 import './CategoryChangeModal.css';
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { createHelpRequest, updateHelpRequestLocation, deleteHelpRequest } from '../../redux/helpRequests';
-import { fetchLocations } from '../../redux/locations';
-import { fetchCategories, createCategory } from '../../redux/categories';
+import { fetchLocations } from '../../redux/locationsSlice';
+import { fetchCategories, createCategory } from '../../redux/categoriesSlice';
 import { useModal } from '../../context/Modal'
 import LocationChangeModal from '../LocationChangeModal/LocationChangeModal';
 import './CreateHelpRequestModal.css'

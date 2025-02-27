@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import sessionReducer from './sessionSlice';
-import helpRequestsReducer from './helpRequestsSlice';
-import locationsReducer from './locationsSlice';
-import categoriesReducer from './categoriesSlice';
+import sessionReducer from './sessionSlice.ts';
+import helpRequestsReducer from './helpRequestsSlice.ts';
+import locationsReducer from './locationsSlice.ts';
+import categoriesReducer from './categoriesSlice.ts';
 
 // Declare Global augmentation for redux devtools extension
 declare global {

@@ -8,8 +8,8 @@ import LocationChangeModal from "../LocationChangeModal/LocationChangeModal";
 import CreateHelpRequestModal from '../CreateHelpRequestModal/CreateHelpRequestModal';
 import { fetchHelpRequests } from "../../redux/helpRequests";
 import './HelpRequestDetail.css'
-import { fetchLocations } from "../../redux/locations";
-import { fetchCategories } from "../../redux/categories";
+import { fetchLocations } from "../../redux/locationsSlice";
+import { fetchCategories } from "../../redux/categoriesSlice";
 import CategoryChangeModal from "../CategoryChangeModal/CategoryChangeModal";
 
 function HelpRequestDetail() {

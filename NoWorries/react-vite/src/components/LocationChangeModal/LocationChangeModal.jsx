@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GoogleMap, Marker, StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector, useDispatch } from 'react-redux';
-import { createLocation, deleteLocation } from '../../redux/locations';
+import { createLocation, deleteLocation } from '../../redux/locationsSlice';
 import { useModal } from '../../context/Modal';
 import { updateHelpRequestLocation } from '../../redux/helpRequests';
 import './LocationChangeModal.css'
