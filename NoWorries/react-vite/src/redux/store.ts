@@ -1,16 +1,8 @@
-import {
-  legacy_createStore as createStore,
-  applyMiddleware,
-  compose,
-  combineReducers,
-  PreloadedState,
-  Store
-} from "redux";
-import thunk from "redux-thunk";
-import sessionReducer from "./session.ts";
-import helpRequestsReducer from "./helpRequests.ts";
-import locationsReducer from "./locations";
-import categoriesReducer from "./categories";
+import { configureStore } from '@reduxjs/toolkit';
+import sessionReducer from './sessionSlice';
+import helpRequestsReducer from './helpRequestsSlice';
+import locationsReducer from './locationsSlice';
+import categoriesReducer from './categoriesSlice';
 
 // Declare Global augmentation for redux devtools extension
 declare global {
@@ -19,29 +11,25 @@ declare global {
   }
 }
 
-const rootReducer = combineReducers({
-  session: sessionReducer,
-  helpRequests : helpRequestsReducer,
-  locations: locationsReducer,
-  categories: categoriesReducer
+const store = configureStore({
+  reducer: {
+    session: sessionReducer,
+    helpRequests: helpRequestsReducer,
+    locations: locationsReducer,
+    categories: categoriesReducer
+  },
+  middleware: (getDefaultMiddleware) => {
+    if (import.meta.env.MODE === 'production') {
+      return getDefaultMiddleware();
+    } else {
+      const logger = require('redux-logger').default;
+      return getDefaultMiddleware().concat(logger);
+    }
+  },
+  devTools: import.meta.env.MODE !== 'production'
 });
 
-let enhancer;
-if (import.meta.env.MODE === "production") {
-  enhancer = applyMiddleware(thunk);
-} else {
-  const logger = (await import("redux-logger")).default;
-  const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  enhancer = composeEnhancers(applyMiddleware(thunk, logger));
-}
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export type RootState = ReturnType<typeof rootReducer>; //this gets the type of combined reducers
-export type AppStore = Store<RootState>
-export type AppDispatch = AppStore['dispatch'] 
-
-const configureStore = (preloadedState?: PreloadedState<RootState>): Store<RootState> => {
-  return createStore(rootReducer, preloadedState, enhancer);
-};
-
-export default configureStore;
+export default store;

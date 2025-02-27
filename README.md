@@ -17,7 +17,8 @@ No Worries is a community-driven platform designed to connect seniors with neigh
 Project is created with:
 * Frontend:
   * React 18
-  * Redux
+  * Redux Toolkit
+  * TypeScript
   * Google Maps API
   * Vite
 * Backend:
@@ -52,7 +53,8 @@ Project is created with:
 3. Install TypeScript and frontend dependencies
       ```bash
       cd react-vite
-      npm install --save-dev typescript @types/react @types/react-dom @types/node @types/google.maps @types/react-redux @types/react-router-dom
+      npm install --save-dev typescript @types/react @types/react-dom @types/node @types/google.maps @types/react-redux @types/react-router-dom @reduxjs/toolkit
+
       npm i
       ```
 

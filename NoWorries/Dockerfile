@@ -29,7 +29,7 @@ RUN pip install psycopg2
 WORKDIR /var/www/react-vite
 COPY react-vite/package*.json ./
 RUN npm install
-RUN npm install --save-dev typescript @types/react @types/react-dom @types/node @types/google.maps @types/react-redux @types/react-router-dom
+RUN npm install --save-dev typescript @types/react @types/react-dom @types/node @types/google.maps @types/react-redux @types/react-router-dom @reduxjs/toolkit
 
 WORKDIR /var/www
 COPY . .
