@@ -39,7 +39,9 @@ import { Category, CategoriesState } from 'types/types';
 export const fetchCategories = createAsyncThunk(
     'categories/fetchAll',
     async () => {
-        const response = await fetch('/api/categories/');
+        const response = await fetch('/api/categories/', {
+            credentials: 'include'
+        });
         if (response.ok) {
             const data = await response.json();
             return data.categories;
@@ -51,7 +53,9 @@ export const fetchCategories = createAsyncThunk(
 export const fetchCategory = createAsyncThunk(
     'categories/fetchOne',
     async (categoryId: number) => {
-        const response = await fetch(`/api/categories/${categoryId}`);
+        const response = await fetch(`/api/categories/${categoryId}`, {
+            credentials: 'include'
+        });
         if (response.ok) {
             const data = await response.json();
             return data.category;
@@ -72,6 +76,7 @@ export const createCategory = createAsyncThunk(
         const response = await fetch('/api/categories', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify(categoryData)
         });
         if (response.ok) {
@@ -113,6 +118,7 @@ export const updateCategory = createAsyncThunk(
       const response = await fetch(`/api/categories/${categoryId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(categoryData)
       });
   
@@ -147,7 +153,8 @@ export const deleteCategory = createAsyncThunk(
     '/categories/delete',
     async (categoryId: number, { rejectWithValue }) => {
         const response = await fetch(`/api/categories/${categoryId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include'
         });
 
         if (response.ok) {
