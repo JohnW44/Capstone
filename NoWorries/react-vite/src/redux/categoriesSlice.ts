@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { RiAspectRatioLine } from 'react-icons/ri';
-import { Category, CategoriesState } from 'types/types';
+import { Category, CategoriesState } from '../types/types';
 
 
 // const LOAD_CATEGORIES = 'categories/LOAD';
@@ -71,7 +70,7 @@ interface CreateCategoryData {
 }
 
 export const createCategory = createAsyncThunk(
-    '/categories/create',
+    'categories/create',
     async (categoryData: CreateCategoryData, { rejectWithValue }) => {
         const response = await fetch('/api/categories', {
             method: 'POST',
@@ -150,7 +149,7 @@ export const updateCategory = createAsyncThunk(
 // };
 
 export const deleteCategory = createAsyncThunk(
-    '/categories/delete',
+    'categories/delete',
     async (categoryId: number, { rejectWithValue }) => {
         const response = await fetch(`/api/categories/${categoryId}`, {
             method: 'DELETE',
@@ -208,11 +207,11 @@ const categoriesSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(fetchCategories.fulfilled, (state, action) => {
+        .addCase(fetchCategories.fulfilled, (state, action: PayloadAction<Category[]>) => {
             return action.payload;
         })
 
-        .addCase(fetchCategory.fulfilled, (state, action) => {
+        .addCase(fetchCategory.fulfilled, (state, action: PayloadAction<Category>) => {
             if (!action.payload) return state;
 
             const index = state.findIndex(category => category.id === action.payload.id);
