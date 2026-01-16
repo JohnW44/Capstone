@@ -8,7 +8,8 @@ RUN apk add --update --no-cache \
     postgresql-dev \
     gcc \
     python3-dev \
-    musl-dev
+    musl-dev \
+    dos2unix
 
 
 ARG FLASK_APP
@@ -41,7 +42,7 @@ RUN npm run build
 
 WORKDIR /var/www
 COPY start.sh .
-RUN chmod +x start.sh
+RUN dos2unix start.sh && chmod +x start.sh
 CMD ["./start.sh"]
 
 ENV VITE_APP_GOOGLE_MAPS_API_KEY=$VITE_APP_GOOGLE_MAPS_API_KEY
