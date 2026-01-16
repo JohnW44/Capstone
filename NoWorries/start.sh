@@ -1,14 +1,21 @@
 #!/bin/sh
-export SECRET_KEY
-export DATABASE_URL
-export FLASK_APP
-export FLASK_ENV
-export SCHEMA
+echo "Starting app..."
 
-echo "DEBUG: SECRET_KEY is set: $(if [ -n \"$SECRET_KEY\" ]; then echo 'YES'; else echo 'NO'; fi)"
-echo "DEBUG from Python:"
-python -c "import os; print('SECRET_KEY:', 'SET' if os.environ.get('SECRET_KEY') else 'NOT SET')"
-
+SECRET_KEY=$SECRET_KEY \
+DATABASE_URL=$DATABASE_URL \
+FLASK_APP=$FLASK_APP \
+FLASK_ENV=$FLASK_ENV \
 flask db upgrade
+
+SECRET_KEY=$SECRET_KEY \
+DATABASE_URL=$DATABASE_URL \
+FLASK_APP=$FLASK_APP \
+FLASK_ENV=$FLASK_ENV \
 flask seed all
-exec gunicorn app:app
+
+exec env \
+  SECRET_KEY=$SECRET_KEY \
+  DATABASE_URL=$DATABASE_URL \
+  FLASK_APP=$FLASK_APP \
+  FLASK_ENV=$FLASK_ENV \
+  gunicorn app:app
