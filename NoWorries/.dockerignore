@@ -2,6 +2,8 @@ instance/*
 instance
 node_modules
 .env
+**/.env
+*.env
 .venv
 dev.db
 .gitignore
