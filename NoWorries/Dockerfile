@@ -40,8 +40,8 @@ RUN npm run build
 
 
 WORKDIR /var/www
-RUN flask db upgrade
-RUN flask seed all
-CMD gunicorn app:app
+COPY start.sh .
+RUN chmod +x start.sh
+CMD ["./start.sh"]
 
 ENV VITE_APP_GOOGLE_MAPS_API_KEY=$VITE_APP_GOOGLE_MAPS_API_KEY
